@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for( 'static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for( 'static', filename='css/style.css') }}">
+
+    <title>Bookspace-книжный интернет магазин</title>
+</head>
+<body>
+<script src="/static/js/bootstrap.bundle.min.js"></script>
+
+<!-- START NAVBAR -->
+<nav class="top-nav">
+    <div class="container">
+        <div class="row justify-content-end">
+            <div class="col-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">О нас</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Доставка и оплата</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">+7 996 115 31 80</a>
+                </li>
+            </div>
+        </div>
+    </div>
+</nav>
+<nav class="navbar bg-white">
+  <div class="container">
+      <div class="d-flex">
+          <div class="p-2 flex-fill">
+              <a class="navbar-logo"><img src="/static/img/logo.png" alt="logo"></a>
+          </div>
+          <div class="p-3 flex-fill">
+              <form class="d-flex me-2" role="search">
+                  <div class="search_item d-flex justify-content-between">
+                      <input class="navbar-search" type="search" placeholder="Поиск" aria-label="Search">
+                      <button class="btn">Найти</button>
+                  </div>
+
+              </form>
+          </div>
+      </div>
+  </div>
+</nav>
+<!-- END NAVBAR -->
+
+
+</body>
+</html>
