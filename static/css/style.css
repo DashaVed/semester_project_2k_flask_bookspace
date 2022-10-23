@@ -7,6 +7,7 @@ body{
     font-style: normal;
     color: #28231D;
     transition: all 0.4s ease;
+    padding-left: 20px;
 }
 
 .top-nav{
@@ -19,7 +20,7 @@ body{
     margin-right: 22px;
     display: inline-block;
     font-size: 12px;
-    color: #555358;
+    color: #28231D;
 }
 
 .top-nav .nav-item:hover{
@@ -28,7 +29,95 @@ body{
 }
 
 .navbar{
+    height: 60px;
+    padding-bottom: 4px;
+    padding-top: 4px;
+    vertical-align: middle;
+
+}
+
+.fill-height{
+    height: 60px !important;
+}
+
+.navbar .navbar-logo{
+
+    margin-right: 10px;
+    color: #FF9F1C;
+    text-decoration: none;
+    font-size: 40px;
+    font-weight: 700;
+    vertical-align: middle;
+
+}
+
+.navbar .input-control_container{
+    padding-top: 10px;
+    height: 60px;
+    vertical-align: middle;
+}
+
+.navbar .navbar_search{
+
+    vertical-align: middle;
+    border: 2px solid #D2D68D;
+    width: 700px;
+    height: 40px;
+    border-radius: 3px;
+    font-size: 16px;
+    font-family: montserrat, sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    color: #28231D;
+}
+
+.navbar .navbar_search input{
+    vertical-align: middle;
     margin: 0;
-    padding-top: 24px;
-    padding-bottom: 16px;
+    width: 560px;
+    border: none;
+    outline: none;
+    box-shadow: none;
+}
+
+.navbar .input-control_container .navbar_search button{
+    float: right;
+    width: 100px;
+    border: 1px solid #D2D68D;
+    background: #D2D68D;
+    color: #F4FEC1;
+    font-size: 16px;
+    font-weight: 700;
+    text-align: center;
+    flex-shrink: 0;
+    height: 38px;
+}
+
+.navbar .input-control_container .navbar_search span{
+    margin-left: 4px;
+    font-size: 24px;
+    vertical-align: middle;
+    color: #D2D68D;
+    align-items: center;
+}
+
+.navbar .input-control_container{
+    margin: 0;
+    width: 620px;
+}
+
+.navbar .nav-user{
+    padding-left: 80px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.navbar .nav-user a{
+    padding-top: 18px;
+    padding-left: 30px;
+    color: #28231D;
+    text-decoration: none;
+    font-size: 36px;
+
 }
