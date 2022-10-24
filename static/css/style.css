@@ -8,6 +8,7 @@ body{
     color: #28231D;
     transition: all 0.4s ease;
     padding-left: 20px;
+    padding-right: 20px;
 }
 
 .top-nav{
@@ -61,7 +62,7 @@ body{
 
     vertical-align: middle;
     border: 2px solid #D2D68D;
-    width: 700px;
+    width: 710px;
     height: 40px;
     border-radius: 3px;
     font-size: 16px;
@@ -103,11 +104,10 @@ body{
 
 .navbar .input-control_container{
     margin: 0;
-    width: 620px;
+    width: 720px;
 }
 
 .navbar .nav-user{
-    padding-left: 80px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -115,9 +115,62 @@ body{
 
 .navbar .nav-user a{
     padding-top: 18px;
-    padding-left: 30px;
+    padding-left: 32px;
     color: #28231D;
     text-decoration: none;
     font-size: 36px;
 
+}
+
+.navbar .nav-user a:hover{
+    color: #363636;
+}
+
+.menu-nav{
+    padding-top: 12px;
+    padding-bottom: 10px;
+    display: flex;
+    flex-shrink: 0;
+}
+
+.menu-nav  button{
+    display: flex;
+    height: 43px;
+    width: auto;
+    border: none;
+    outline: none;
+    background-color: white;
+    /*padding-left: 32px;*/
+    text-align: center;
+}
+
+.menu-nav .menu-text{
+    padding-top: 8px;
+    font-family: montserrat, sans-serif;
+    font-weight: 500;
+    font-size: 18px;
+    color: #28231D;
+}
+
+.menu-icon{
+    /*padding: 24px 14px;*/
+    margin-right: 10px;
+    font-size: 32px;
+    text-align: center;
+}
+
+.navbar-nav{
+    /*padding-left: 50px;*/
+}
+
+.navbar-nav a{
+    margin-left: 100px;
+    font-family: montserrat, sans-serif;
+    font-weight: 500;
+    font-size: 18px;
+    color: #28231D;
+}
+
+.line{
+    border-bottom: 2px solid #D2D68D;
 }
