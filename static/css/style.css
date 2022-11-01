@@ -140,8 +140,6 @@ body{
     border: none;
     outline: none;
     background-color: white;
-    /*padding-left: 32px;*/
-    text-align: center;
 }
 
 .menu-nav .menu-text{
@@ -153,14 +151,8 @@ body{
 }
 
 .menu-icon{
-    /*padding: 24px 14px;*/
     margin-right: 10px;
     font-size: 32px;
-    text-align: center;
-}
-
-.navbar-nav{
-    /*padding-left: 50px;*/
 }
 
 .navbar-nav a{
@@ -173,4 +165,11 @@ body{
 
 .line{
     border-bottom: 2px solid #D2D68D;
+}
+
+.banner img{
+    margin-top: 30px;
+    background-position: center !important;
+    height: 80%;
+    width: 100%;
 }
