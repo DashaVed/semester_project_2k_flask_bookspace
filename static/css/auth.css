@@ -1,0 +1,19 @@
+body{
+    font-family: montserrat, sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    color: #28231D;
+    transition: all 0.4s ease;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+.card{
+    min-height: 100%;
+}
+
+.return-main a{
+    font-family: montserrat, sans-serif;
+    font-weight: 500;
+    color: #28231D;
+    text-decoration: underline;
+}
