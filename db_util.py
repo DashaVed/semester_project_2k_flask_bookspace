@@ -12,23 +12,23 @@ class Database:
         )
         self.cur = self.con.cursor()
 
-    def select(self, query):
-        self.cur.execute(query)
+    def select(self, query, values):
+        self.cur.execute(query, values)
         data = self.prepare_data(self.cur.fetchall())
         if len(data) == 1:
             data = data[0]
 
         return data
 
-    def insert(self, values):
-        query = "INSERT INTO films (name, rating, country) VALUES (%s, %s, %s)"
+    def insert_user(self, values):
+        query = 'INSERT INTO account (first_name, last_name, phone, email, password) VALUES (%s, %s, %s, %s, %s)'
         self.cur.execute(query, values)
         self.con.commit()
 
     def prepare_data(self, data):
-        films = []
+        prepare_data = []
         if len(data):
             column_names = [desc[0] for desc in self.cur.description]
             for row in data:
-                films += [{c_name: row[key] for key, c_name in enumerate(column_names)}]
-        return films
+                prepare_data += [{c_name: row[key] for key, c_name in enumerate(column_names)}]
+        return prepare_data
