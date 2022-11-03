@@ -26,7 +26,7 @@ def main():
 @app.route('/catalog/<parent_id>')
 def get_catalog(parent_id):
     if parent_id:
-        categories = db.select(f'SELECT * FROM category WHERE category_parent_id={parent_id}')
+        categories = db.select(f'SELECT * FROM category WHERE category_parent_id= %s', (parent_id,))
     else:
         categories = db.select('SELECT * FROM category WHERE category_parent_id is NULL')
 
@@ -132,7 +132,4 @@ def logout():
     session.pop('id', None)
     session.pop('email', None)
     return redirect(url_for('main'))
-
-
-
 

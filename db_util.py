@@ -12,7 +12,7 @@ class Database:
         )
         self.cur = self.con.cursor()
 
-    def select(self, query, values):
+    def select(self, query, values=()):
         self.cur.execute(query, values)
         data = self.prepare_data(self.cur.fetchall())
         if len(data) == 1:
