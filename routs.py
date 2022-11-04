@@ -2,11 +2,17 @@ import re
 import datetime
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from werkzeug.security import generate_password_hash, check_password_hash
+# from flask_uploads import IMAGES, UploadSet
+import os
 
 from db_util import Database
-# from forms import RegistrationForm
+from forms import AddProduct
+
+
+base_directory = os.path.abspath(os.path.dirname(__file__))
 
 app = Flask(__name__)
+app.config =
 
 db = Database()
 
@@ -19,7 +25,7 @@ def main():
     is_authenticated = False
     if 'loggedin' in session:
         is_authenticated = True
-    return render_template('main.html', is_authenticated=is_authenticated)
+    return render_template('shop/main.html', is_authenticated=is_authenticated)
 
 
 @app.route('/catalog', defaults={'parent_id': None})
@@ -30,47 +36,47 @@ def get_catalog(parent_id):
     else:
         categories = db.select('SELECT * FROM category WHERE category_parent_id is NULL')
 
-    return render_template('catalog.html', categories=categories)
+    return render_template('shop/catalog.html', categories=categories)
 
 
 @app.route('/product/<book_id>')
 def get_book(book_id):
-    return render_template('sales.html')
+    return render_template('shop/sales.html')
 
 
 @app.route('/sales')
 def get_sales():
-    return render_template('sales.html')
+    return render_template('shop/sales.html')
 
 
 @app.route('/new')
 def get_new():
-    return render_template('new.html')
+    return render_template('shop/new.html')
 
 
 @app.route('/bestsellery')
 def get_bestsellery():
-    return render_template('bestsellery.html')
+    return render_template('shop/bestsellery.html')
 
 
 @app.route('/best-price')
 def get_best_price():
-    return render_template('best_price.html')
+    return render_template('shop/best_price.html')
 
 
 @app.route('/personal/profile')
 def profile():
-    return render_template('profile.html')
+    return render_template('shop/profile.html')
 
 
 @app.route('/delivery')
 def delivery():
-    return render_template('delivery.html')
+    return render_template('shop/delivery.html')
 
 
 @app.route('/about-us')
 def about_us():
-    return render_template('about_us.html')
+    return render_template('shop/about_us.html')
 
 
 @app.route('/registration', methods=['GET', 'POST'])
@@ -104,7 +110,7 @@ def registration():
             session['email'] = user['email']
             return redirect(url_for('main'))
 
-    return render_template('registration.html')
+    return render_template('shop/registration.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -123,7 +129,7 @@ def login():
                 return redirect(url_for('main'))
 
         flash('Incorrect username/password')
-    return render_template('authorization.html')
+    return render_template('shop/authorization.html')
 
 
 @app.route('/logout', methods=['GET', 'POST'])
@@ -133,3 +139,13 @@ def logout():
     session.pop('email', None)
     return redirect(url_for('main'))
 
+
+@app.route('/add-product', methods=['GET', 'POST'])
+def add_product():
+    form = AddProduct(request.form)
+
+    return render_template('shop/product_form.html', form=form)
+
+
+if __name__ == '__main__':
+    print(base_directory)
