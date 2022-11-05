@@ -2,21 +2,26 @@ import re
 import datetime
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from werkzeug.security import generate_password_hash, check_password_hash
-# from flask_uploads import IMAGES, UploadSet
+from flask_uploads import IMAGES, UploadSet, configure_uploads, patch_request_class
 import os
+import secrets
 
 from db_util import Database
 from forms import AddProduct
 
-
 base_directory = os.path.abspath(os.path.dirname(__file__))
 
 app = Flask(__name__)
-app.config =
+app.config['UPLOADED_PHOTOS_DEST'] = os.path.join(os.path.join(base_directory, 'static'), 'img')
+photos = UploadSet('photos', IMAGES)
+configure_uploads(app, photos)
+patch_request_class(app)
 
 db = Database()
 
 app.secret_key = 'bookspace-semester-project'
+
+
 # app.permanent_session_lifetime = datetime.timedelta(days=365)
 
 
@@ -90,8 +95,8 @@ def registration():
 
         _hashed_password = generate_password_hash(password)
 
-        user = db.select('SELECT * FROM account WHERE email= %s', values=(email, ))
-        phones = db.select('SELECT phone FROM account WHERE phone= %s', values=(phone, ))
+        user = db.select('SELECT * FROM account WHERE email= %s', values=(email,))
+        phones = db.select('SELECT phone FROM account WHERE phone= %s', values=(phone,))
         if user:
             flash('Аккаунт с таким email уже существует')
         elif phones:
@@ -103,8 +108,10 @@ def registration():
         elif not first_name or not last_name or not password or not email:
             flash('Заполните все поля')
         else:
-            db.insert_user(values=(first_name, last_name, phone, email, _hashed_password))
-            user = db.select('SELECT * FROM account WHERE email= %s', values=(email, ))
+            db.insert('INSERT INTO account (first_name, last_name, phone, email, password)'
+                      ' VALUES (%s, %s, %s, %s, %s)',
+                      values=(first_name, last_name, phone, email, _hashed_password))
+            user = db.select('SELECT * FROM account WHERE email= %s', values=(email,))
             session['loggedin'] = True
             session['id'] = user['user_id']
             session['email'] = user['email']
@@ -119,7 +126,7 @@ def login():
         email = request.form.get('email')
         password = request.form.get('password')
 
-        user = db.select("SELECT * FROM account WHERE email= %s", values=(email, ))
+        user = db.select("SELECT * FROM account WHERE email= %s", values=(email,))
         if user:
             password_rs = user['password']
             if check_password_hash(password_rs, password):
@@ -143,9 +150,21 @@ def logout():
 @app.route('/add-product', methods=['GET', 'POST'])
 def add_product():
     form = AddProduct(request.form)
-
+    if request.method == 'POST':
+        title = form.title.data
+        author = form.author.data
+        description = form.description.data
+        publishing_office = form.publishing_office.data
+        series = form.series.data
+        quantity = form.quantity.data
+        price = form.price.data
+        image = photos.save(request.files.get('image'), name=secrets.token_hex(10) + '.')
+        db.insert('INSERT INTO product (title, author, description, publishing_office, series, quantity, price, image)'
+                  ' VALUES (%s, %s, %s, %s, %s, %s, %s, %s)',
+                  values=(title, author, description, publishing_office, series, quantity, price, image))
+        flash('Товар успешно добавлен')
     return render_template('shop/product_form.html', form=form)
 
 
 if __name__ == '__main__':
-    print(base_directory)
+    app.run(debug=True)

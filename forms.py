@@ -50,7 +50,7 @@ from wtforms.validators import (
 #     password = PasswordField('Пароль', validators=[DataRequired()])
 
 
-class AddProduct(Form):
+class AddProduct(FlaskForm):
     title = StringField('Название', validators=[DataRequired()])
     author = StringField('Автор', validators=[DataRequired()])
     description = TextAreaField('Описание', validators=[DataRequired()])

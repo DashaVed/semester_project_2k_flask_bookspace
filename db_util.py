@@ -20,8 +20,7 @@ class Database:
 
         return data
 
-    def insert_user(self, values):
-        query = 'INSERT INTO account (first_name, last_name, phone, email, password) VALUES (%s, %s, %s, %s, %s)'
+    def insert(self, query, values):
         self.cur.execute(query, values)
         self.con.commit()
 
