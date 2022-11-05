@@ -1,0 +1,30 @@
+{% extends "shop/layout.html" %}
+
+{% block title %}Каталог книг в интернет магазине Bookspace{% endblock %}
+
+{% block content %}
+<div class="catalog_title">
+    <h1>Каталог</h1>
+</div>
+<div class="catalog_body">
+    <div class="catalog-sidebar">
+        <section class="catalog-nav">
+            <header class="catalog-nav_title">Категории</header>
+            <nav class="catalog-nav_nav">
+                <ul class="catalog-nav_list">
+                    {% for category in categories %}
+                        <li class="catalog-nav_item">
+                        <a href="{{ url_for('get_catalog', parent_id=category.id) }}"
+                           class="catalog-nav_link">{{ category.value }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </nav>
+        </section>
+        <div class="filter">
+
+        </div>
+    </div>
+
+</div>
+{% endblock %}

@@ -24,6 +24,12 @@ class Database:
         self.cur.execute(query, values)
         self.con.commit()
 
+    def get_insert(self, query, values):
+        self.cur.execute(query, values)
+        data = self.cur.fetchone()[0]
+        self.con.commit()
+        return data
+
     def prepare_data(self, data):
         prepare_data = []
         if len(data):

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for( 'static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for( 'static', filename='css/boxicons.min.css') }}">
+
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+<script src="/static/js/bootstrap.bundle.min.js"></script>
+
+{% block content %}{% endblock %}
+
+</body>
+</html>

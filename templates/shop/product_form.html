@@ -1,46 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Добавить товар</title>
+{% extends "shop/base.html" %}
 
-    <link rel="stylesheet" type="text/css" href="{{ url_for( 'static', filename='css/bootstrap.min.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for( 'static', filename='css/style.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for( 'static', filename='css/boxicons.min.css') }}">
-</head>
-<body>
-<script src="/static/js/bootstrap.bundle.min.js"></script>
+{% block title %}Добавление товара{% endblock %}
 
-<section class="add_product">
-    <div class="mask d-flex align-items-center">
-        <div class="container">
-            <div class="row d-flex justify-content-center align-items-center mt-4">
-                <div class="col-12 col-md-9 col-lg-7 col-xl-5">
-                    <h2 class="text-center pb-4">Добавление товара</h2>
-                    {% from "_formhelpers.html" import render_field %}
-                    <form method="post" enctype="multipart/form-data">
-                        {{ render_field(form.title, class="form-control") }}
-                        {{ render_field(form.author, class="form-control") }}
-                        {{ render_field(form.description, class="form-control", rows=5) }}
-                        {{ render_field(form.publishing_office, class="form-control") }}
-                        {{ render_field(form.series, class="form-control") }}
-                        {{ render_field(form.price, class="form-control") }}
-                        {{ render_field(form.image, class="form-control") }}
-                        {% with messages = get_flashed_messages() %}
-                            {% if messages %}
-                                {% for message in messages %}
-                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                        {{ message }}
-                                    </div>
+{% block content %}
+    <section class="add_product">
+        <div class="mask d-flex align-items-center">
+            <div class="container">
+                <div class="row d-flex justify-content-center align-items-center mt-4">
+                    <div class="col-12 col-md-9 col-lg-7 col-xl-5">
+                        <h2 class="text-center pb-4">Добавление товара</h2>
+                        {% from "_formhelpers.html" import render_field %}
+                        <form method="post" enctype="multipart/form-data">
+                            {{ render_field(form.title, class="form-control") }}
+                            {{ render_field(form.author, class="form-control") }}
+                            {{ render_field(form.description, class="form-control", rows=5) }}
+                            <label for="category">Категория</label>
+                            <select name="category" class="form-control" required>
+                                <option>Выбрать категорию</option>
+                                {% for category in categories %}
+                                    <option value="{{ category.id }}">{{ category.value }}</option>
                                 {% endfor %}
-                            {% endif %}
-                        {% endwith %}
-                        <input class="btn btn-info" type=submit value=Добавить>
-                    </form>
+                            </select>
+                            <label for="label">Ярлык</label>
+                            <select name="label" class="form-control pt-2">
+                                <option value="none">Выбрать ярлык</option>
+                                {% for label in labels %}
+                                    <option value="{{ label.id }}">{{ label.value }}</option>
+                                {% endfor %}
+                            </select>
+                            {{ render_field(form.publishing_office, class="form-control") }}
+                            {{ render_field(form.series, class="form-control") }}
+                            {{ render_field(form.price, class="form-control") }}
+                            {{ render_field(form.image, class="form-control") }}
+                            {% with messages = get_flashed_messages() %}
+                                {% if messages %}
+                                    {% for message in messages %}
+                                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                            {{ message }}
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                            {% endwith %}
+                            <input class="btn btn-info" type=submit value=Добавить>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
-</body>
-</html>
+    </section>
+{% endblock %}
