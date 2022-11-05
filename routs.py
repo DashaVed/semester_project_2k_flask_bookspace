@@ -135,7 +135,7 @@ def login():
                 session['email'] = user['email']
                 return redirect(url_for('main'))
 
-        flash('Incorrect username/password')
+        flash('Неправильный логин или пароль. Попробуйте еще раз.')
     return render_template('shop/authorization.html')
 
 
@@ -149,6 +149,8 @@ def logout():
 
 @app.route('/add-product', methods=['GET', 'POST'])
 def add_product():
+    categories = db.select('SELECT id, value FROM category')
+    labels = db.select('SELECT id, value FROM shop_label')
     form = AddProduct(request.form)
     if request.method == 'POST':
         title = form.title.data
@@ -159,11 +161,19 @@ def add_product():
         quantity = form.quantity.data
         price = form.price.data
         image = photos.save(request.files.get('image'), name=secrets.token_hex(10) + '.')
-        db.insert('INSERT INTO product (title, author, description, publishing_office, series, quantity, price, image)'
-                  ' VALUES (%s, %s, %s, %s, %s, %s, %s, %s)',
-                  values=(title, author, description, publishing_office, series, quantity, price, image))
+        product_id = db.get_insert(
+            'INSERT INTO product (title, author, description, publishing_office, series, quantity, price, image)'
+            ' VALUES (%s, %s, %s, %s, %s, %s, %s, %s) RETURNING product_id',
+            values=(title, author, description, publishing_office, series, quantity, price, image))
+        category_id = request.form.get('category')
+        db.insert('INSERT INTO product_category (product_id, category_id) VALUES (%s, %s)',
+                  values=(product_id, category_id, ))
+        label_id = request.form.get('label')
+        if label_id != 'none':
+            db.insert('INSERT INTO product_label (product_id, label_id) VALUES (%s, %s)',
+                      values=(product_id, label_id,))
         flash('Товар успешно добавлен')
-    return render_template('shop/product_form.html', form=form)
+    return render_template('shop/product_form.html', form=form, categories=categories, labels=labels)
 
 
 if __name__ == '__main__':
