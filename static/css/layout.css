@@ -107,6 +107,10 @@ body{
     width: 720px;
 }
 
+.dropdown{
+    padding-top: 18px;
+}
+
 .navbar .nav-user{
     display: inline-flex;
     align-items: center;
@@ -119,10 +123,29 @@ body{
     color: #28231D;
     text-decoration: none;
     font-size: 36px;
+}
 
+.dropdown .dropdown-menu .dropdown-item{
+    padding: 0;
+    margin-left: 24px;
+    margin-bottom: 4px;
+    width: auto;
+    height: 20px;
+}
+
+.dropdown .dropdown-menu .dropdown-item:hover{
+    text-decoration: underline;
+}
+
+.dropdown .dropdown-menu .dropdown-item h6{
+    font-family: montserrat, sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    color: #28231D;
 }
 
 .navbar .nav-user a:hover{
+    background-color: white;
     color: #363636;
 }
 

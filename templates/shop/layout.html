@@ -50,7 +50,22 @@
             </div>
             <div class="nav-user">
                 {% if is_authenticated %}
-                    <a href="{{ url_for('profile') }}"><i class='bx bx-user-circle'></i></a>
+                    <div class="dropdown">
+                        <a href="#" role="button" id="dropdownMenuLink"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class='bx bx-user-circle'></i>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <li><a class="dropdown-item " href="{{ url_for('profile') }}"><h6>Профиль</h6></a></li>
+                            <li><a class="dropdown-item small" href="#"><h6>Мои заказы</h6></a></li>
+                            <li><a class="dropdown-item small" href="#"><h6>Отложенные</h6></a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item small" href="{{ url_for('logout') }}"><h6>Выйти</h6></a></li>
+                        </ul>
+                    </div>
+                    {#                    <a href="{{ url_for('profile') }}"><i class='bx bx-user-circle'></i></a>#}
                 {% else %}
                     <a href="{{ url_for('login') }}"><i class='bx bx-user-circle'></i></a>
                 {% endif %}
