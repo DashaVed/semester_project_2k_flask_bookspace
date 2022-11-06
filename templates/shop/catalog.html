@@ -1,30 +1,74 @@
 {% extends "shop/layout.html" %}
 
 {% block title %}Каталог книг в интернет магазине Bookspace{% endblock %}
+{% block style %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for( 'static', filename='css/catalog.css') }}">
+{% endblock %}
 
 {% block content %}
-<div class="catalog_title">
-    <h1>Каталог</h1>
-</div>
-<div class="catalog_body">
-    <div class="catalog-sidebar">
-        <section class="catalog-nav">
-            <header class="catalog-nav_title">Категории</header>
-            <nav class="catalog-nav_nav">
-                <ul class="catalog-nav_list">
-                    {% for category in categories %}
-                        <li class="catalog-nav_item">
-                        <a href="{{ url_for('get_catalog', parent_id=category.id) }}"
-                           class="catalog-nav_link">{{ category.value }}</a>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </nav>
-        </section>
-        <div class="filter">
+    <div class="catalog">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="catalog_title pt-3 pb-3">
+                    <h1>Каталог</h1>
+                </div>
+                <div class="catalog_body">
+                    <div class="d-flex fill-height">
+                        <div class="catalog-sidebar">
+                            <section class="catalog-nav">
+                                <header class="catalog-nav_title pb-1">Категории</header>
+                                <nav class="catalog-nav_nav">
+                                    <ul class="catalog-nav_list">
+                                        {% for category in categories %}
+                                            <li class="catalog-nav_item pb-1">
+                                                <a href="{{ url_for('get_catalog', parent_id=category.id) }}"
+                                                   class="catalog-nav_link ">{{ category.value }}</a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </nav>
+                            </section>
+                            <div class="filter">
+                            </div>
+                        </div>
+                        <div class="catalog-content">
+                            <div class="catalog-product-list d-flex fill-height flex-wrap">
+                                {% for product in products %}
+                                    <div class="product-list-item">
+                                        <article class="product-card">
+                                            <div class="product-card-image"
+                                                 onclick="location.href =
+                                                         '{{ url_for("get_book", book_id=product['product_id']) }}'">
+                                                <img src="{{ url_for( 'static', filename='img/' + product.image) }}"
+                                                     alt="{{ product.title }}">
+                                            </div>
+                                            <div class="product-card-content">
+                                                <div class="product-card-price">
+                                                    <span>{{ product.price| int }} p.</span>
+                                                </div>
+                                                <a class="product-card-title-link"
+                                                   href="{{ url_for("get_book", book_id=product['product_id']) }}">
+                                                    {{ product.title }}</a>
+                                                <div class="product-card-author">
+                                                    <span>{{ product.author }}</span>
+                                                </div>
+                                                <div class="product-card-buttons d-flex">
+                                                    <button type="button" class="b24-btn product-card__add-to-cart">
+                                                        В корзину</button>
+                                                    <button type="button" class="product-card__add-favorites justify-content-end">
+                                                        <i class='bx bx-heart'></i>
+                                                    </button>
 
+                                                </div>
+                                            </div>
+                                        </article>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-
-</div>
 {% endblock %}

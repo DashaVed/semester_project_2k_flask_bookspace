@@ -23,14 +23,18 @@ app.secret_key = 'bookspace-semester-project'
 
 
 # app.permanent_session_lifetime = datetime.timedelta(days=365)
+def is_authenticated():
+    return True if 'loggedin' in session else False
+
+
+def is_admin():
+    if is_authenticated():
+        return True if session['id'] == '4' else False
 
 
 @app.route("/")
 def main():
-    is_authenticated = False
-    if 'loggedin' in session:
-        is_authenticated = True
-    return render_template('shop/main.html', is_authenticated=is_authenticated)
+    return render_template('shop/main.html', is_authenticated=is_authenticated(), is_admin=is_admin())
 
 
 @app.route('/catalog', defaults={'parent_id': None})
@@ -40,8 +44,9 @@ def get_catalog(parent_id):
         categories = db.select(f'SELECT * FROM category WHERE category_parent_id= %s', (parent_id,))
     else:
         categories = db.select('SELECT * FROM category WHERE category_parent_id is NULL')
+    products = db.select(f'SELECT * FROM product')
 
-    return render_template('shop/catalog.html', categories=categories)
+    return render_template('shop/catalog.html', categories=categories, products=products)
 
 
 @app.route('/product/<book_id>')
@@ -71,7 +76,7 @@ def get_best_price():
 
 @app.route('/personal/profile')
 def profile():
-    return render_template('shop/profile.html')
+    return render_template('shop/profile.html', is_authenticated=is_authenticated(), is_admin=is_admin())
 
 
 @app.route('/delivery')

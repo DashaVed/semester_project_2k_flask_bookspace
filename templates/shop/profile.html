@@ -3,4 +3,10 @@
 {% block title %}Личный кабинет{% endblock %}
 
 {% block content %}
+    {% if is_authenticated %}
+        <p>вы авторизованы</p>
+    {% endif %}
+    {% if is_admin %}
+    <p>вы админ</p>
+    {% endif %}
 {% endblock %}
