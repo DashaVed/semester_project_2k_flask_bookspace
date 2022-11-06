@@ -44,14 +44,15 @@ def get_catalog(parent_id):
         categories = db.select(f'SELECT * FROM category WHERE category_parent_id= %s', (parent_id,))
     else:
         categories = db.select('SELECT * FROM category WHERE category_parent_id is NULL')
-    products = db.select(f'SELECT * FROM product')
+    products = db.select('SELECT * FROM product')
 
     return render_template('shop/catalog.html', categories=categories, products=products)
 
 
 @app.route('/product/<book_id>')
 def get_book(book_id):
-    return render_template('shop/sales.html')
+    book = db.select('SELECT * FROM product WHERE product_id = %s', (book_id, ))
+    return render_template('shop/book.html', book=book)
 
 
 @app.route('/sales')

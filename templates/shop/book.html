@@ -1,10 +1,62 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "shop/layout.html" %}
 
-</body>
-</html>
+{% block title %}Книга {{ book.title }} - {{ book.author }}{% endblock %}
+{% block style %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for( 'static', filename='css/book_page.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="book-page">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="book-title pb-3 pt-3">
+                    <h1>{{ book.author }}: {{ book.title }}</h1>
+                </div>
+                <div class="book-page-body d-flex">
+                    <div class="book-content">
+                        <div class="book-image">
+                            <img src="{{ url_for( 'static', filename='img/' + book.image) }}"
+                                 alt="{{ book.title }}">
+                        </div>
+                        <div class="book-description">
+                            <h3>Описание</h3>
+                            <p>{{ book.description }}</p>
+                        </div>
+                        <div class="book-characteristics">
+                            <h3>Характеристики</h3>
+                            <ul class="book-characteristics-list">
+                                <li class="book-charactiristics-item">
+                                    <span class="item-name">Автор:
+                                        <span class="item-value">{{ book.author }}</span>
+                                    </span>
+                                </li>
+                                <li class="book-charactiristics-item">
+                                    <span class="item-name">Издательство:
+                                        <span class="item-value">{{ book.publishing_office }}</span>
+                                    </span>
+                                </li>
+                                <li class="book-charactiristics-item">
+                                    <span class="item-name">Серия:
+                                        <span class="item-value">{{ book.series }}</span>
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="book-sidebar">
+                        <div class="product-card-buttons d-flex">
+                            <button type="button" class="b24-btn product-card__add-to-cart">
+                                В корзину
+                            </button>
+                            <button type="button"
+                                    class="product-card__add-favorites justify-content-end">
+                                <i class='bx bx-heart'></i>
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
