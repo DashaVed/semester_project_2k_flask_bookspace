@@ -7,7 +7,7 @@ import os
 import secrets
 
 from db_util import Database
-from forms import AddProduct
+from forms import AddProduct, RegistrationForm
 
 base_directory = os.path.abspath(os.path.dirname(__file__))
 
@@ -20,9 +20,8 @@ patch_request_class(app)
 db = Database()
 
 app.secret_key = 'bookspace-semester-project'
+app.permanent_session_lifetime = datetime.timedelta(days=365)
 
-
-# app.permanent_session_lifetime = datetime.timedelta(days=365)
 def is_authenticated():
     return True if 'loggedin' in session else False
 
@@ -51,43 +50,29 @@ def get_catalog(parent_id):
 
 @app.route('/product/<book_id>')
 def get_book(book_id):
-    book = db.select('SELECT * FROM product WHERE product_id = %s', (book_id, ))
+    book = db.select('SELECT * FROM product WHERE product_id = %s', (book_id,))
     return render_template('shop/book.html', book=book)
 
 
-@app.route('/sales')
-def get_sales():
-    return render_template('shop/sales.html')
-
-
-@app.route('/new')
-def get_new():
-    return render_template('shop/new.html')
-
-
-@app.route('/bestsellery')
-def get_bestsellery():
-    return render_template('shop/bestsellery.html')
-
-
-@app.route('/best-price')
-def get_best_price():
-    return render_template('shop/best_price.html')
-
-
-@app.route('/personal/profile')
+@app.route('/personal/profile', methods=['GET', 'POST'])
 def profile():
-    return render_template('shop/profile.html', is_authenticated=is_authenticated(), is_admin=is_admin())
+    is_auth = is_authenticated()
+    if is_auth:
+        user = db.select('SELECT * FROM account WHERE user_id = %s', values=(session['id'],))
+        form = RegistrationForm()
+        if request.method == 'POST':
+            pass
+        return render_template('shop/profile.html', is_authenticated=is_auth, user=user, form=form)
 
 
-@app.route('/delivery')
-def delivery():
-    return render_template('shop/delivery.html')
+@app.route('/personal/order')
+def order():
+    return render_template('shop/order.html')
 
 
-@app.route('/about-us')
-def about_us():
-    return render_template('shop/about_us.html')
+@app.route('/cart')
+def get_cart():
+    ...
 
 
 @app.route('/registration', methods=['GET', 'POST'])
@@ -173,13 +158,43 @@ def add_product():
             values=(title, author, description, publishing_office, series, quantity, price, image))
         category_id = request.form.get('category')
         db.insert('INSERT INTO product_category (product_id, category_id) VALUES (%s, %s)',
-                  values=(product_id, category_id, ))
+                  values=(product_id, category_id,))
         label_id = request.form.get('label')
         if label_id != 'none':
             db.insert('INSERT INTO product_label (product_id, label_id) VALUES (%s, %s)',
                       values=(product_id, label_id,))
         flash('Товар успешно добавлен')
     return render_template('shop/product_form.html', form=form, categories=categories, labels=labels)
+
+
+@app.route('/delivery')
+def delivery():
+    return render_template('shop/delivery.html')
+
+
+@app.route('/about-us')
+def about_us():
+    return render_template('shop/about_us.html')
+
+
+@app.route('/sales')
+def get_sales():
+    return render_template('shop/sales.html')
+
+
+@app.route('/new')
+def get_new():
+    return render_template('shop/new.html')
+
+
+@app.route('/bestsellery')
+def get_bestsellery():
+    return render_template('shop/bestsellery.html')
+
+
+@app.route('/best-price')
+def get_best_price():
+    return render_template('shop/best_price.html')
 
 
 if __name__ == '__main__':

@@ -8,46 +8,25 @@ from wtforms.validators import (
     Length,
     Optional
 )
-#
-#
-# class RegistrationForm(FlaskForm):
-#     first_name = StringField(
-#         'Имя',
-#         validators=[DataRequired()]
-#     )
-#     last_name = StringField(
-#         'Фамилия',
-#         validators=[DataRequired()]
-#     )
-#     phone = StringField(
-#         'Телефон',
-#         validators=[DataRequired()]
-#     )
-#     email = StringField(
-#         'Email',
-#         validators=[
-#             Email(message='Enter a valid email.'),
-#             DataRequired()
-#         ]
-#     )
-#     password = PasswordField(
-#         'Пароль',
-#         validators=[
-#             DataRequired(),
-#             Length(min=6, message='Select a stronger password.')
-#         ]
-#     )
-#
-#
-# class LoginForm(FlaskForm):
-#     email = StringField(
-#         'Логин',
-#         validators=[
-#             DataRequired(),
-#             Email(message='Enter a valid email.')
-#         ]
-#     )
-#     password = PasswordField('Пароль', validators=[DataRequired()])
+
+
+class RegistrationForm(FlaskForm):
+    first_name = StringField('Имя', validators=[DataRequired()])
+    last_name = StringField('Фамилия', validators=[DataRequired()])
+    phone = StringField('Телефон', validators=[DataRequired()])
+    email = StringField('Email', validators=[Email(message='Enter a valid email.'), DataRequired()])
+    password = PasswordField('Пароль', validators=[DataRequired()])
+
+
+class LoginForm(FlaskForm):
+    email = StringField(
+        'Логин',
+        validators=[
+            DataRequired(),
+            Email(message='Enter a valid email.')
+        ]
+    )
+    password = PasswordField('Пароль', validators=[DataRequired()])
 
 
 class AddProduct(FlaskForm):

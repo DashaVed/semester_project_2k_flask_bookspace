@@ -1,0 +1,51 @@
+{% extends 'shop/layout.html' %}
+
+{% block title %}Личный кабинет{% endblock %}
+{% block style %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for( 'static', filename='css/profile.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="profile">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="profile-title pt-3 pb-3">
+                    <h1>Личный кабинет</h1>
+                </div>
+                <div class="profile-body d-flex">
+                    <div class="profile-sidebar">
+                        <section class="profile-nav">
+                            <header class="profile-nav_title pb-1">
+                                <span class="profile-nav-name">{{ user.first_name }} {{ user.last_name }}</span><br>
+                                <span class="profile-nav-author">{{ user.email }}</span>
+                            </header>
+                            <nav class="profile-nav_nav">
+                                <ul class="profile-nav_list">
+                                    <li class="profile-nav_item pb-1">
+                                        <a href="{{ url_for('profile') }}"
+                                           class="profile-nav_link ">Личные данные</a>
+                                    </li>
+                                    <li class="profile-nav_item pb-1">
+                                        <a href="#"
+                                           class="profile-nav_link ">Мои заказы</a>
+                                    </li>
+                                    <li class="profile-nav_item pb-1">
+                                        <a href="#"
+                                           class="profile-nav_link ">Отложенные</a>
+                                    </li>
+                                    <li class="profile-nav_item pb-1">
+                                        <a href="{{ url_for('logout') }}"
+                                           class="profile-nav_link ">Выйти</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </section>
+                    </div>
+                    {% block body %}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

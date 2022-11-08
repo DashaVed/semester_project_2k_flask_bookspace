@@ -1,0 +1,116 @@
+h1 {
+    font-family: montserrat, sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    color: #28231D;
+    font-size: 32px;
+}
+
+h5 {
+    font-family: montserrat, sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    color: #28231D;
+    font-size: 24px;
+    padding-bottom: 10px;
+}
+
+/*START SIDEBAR*/
+
+.profile-nav {
+    min-width: 200px;
+    height: auto !important;
+    border: 1px solid #DCDCDC;
+    border-radius: 3px;
+
+}
+
+.profile-nav_title {
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
+
+.profile-nav-name {
+    font-size: 16px;
+    font-family: montserrat, sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    color: #28231D;
+}
+
+.profile-nav-author {
+    font-size: 12px;
+    font-family: montserrat, sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    color: #28231D;
+}
+
+.profile-nav_item {
+    list-style-type: none;
+    margin-bottom: 10px;
+}
+
+.profile-nav_link {
+    font-size: 16px;
+    font-family: montserrat, sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    color: #28231D;
+    text-decoration: none;
+}
+
+.profile-nav_link:hover {
+    color: #FF9F1C;
+    font-weight: 600;
+}
+
+/*END SIDEBAR*/
+
+.profile-content_edit {
+    margin-left: 100px;
+}
+
+.profile-content_edit dt {
+    font-family: montserrat, sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    color: #28231D;
+    font-size: 14px;
+}
+
+.profile-content_edit input {
+    font-family: montserrat, sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    color: #28231D;
+    width: 320px;
+    border: 1px solid #DCDCDC;
+}
+
+.profile-content_edit input:focus,
+.profile-content_edit input:hover,
+.profile-content_edit input:active {
+    border: 1px solid #DCDCDC;
+    outline: none;
+    box-shadow: none;
+}
+
+.form_save-data{
+    margin-top: 10px;
+    width: 120px;
+    border: 1px solid #D2D68D;
+    background-color: #D2D68D;
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+    text-align: center;
+    height: 38px;
+}
+
+.form_save-data:hover, .form_save-data:active {
+    border: 1px solid #F4FEC1;
+    background-color: #F4FEC1;
+    color: #28231D;
+}

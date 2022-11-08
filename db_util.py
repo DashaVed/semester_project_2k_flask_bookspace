@@ -30,6 +30,9 @@ class Database:
         self.con.commit()
         return data
 
+    def update(self, query, values):
+        ...
+
     def prepare_data(self, data):
         prepare_data = []
         if len(data):
