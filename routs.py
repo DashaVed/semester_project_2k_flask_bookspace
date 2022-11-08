@@ -22,6 +22,13 @@ db = Database()
 app.secret_key = 'bookspace-semester-project'
 app.permanent_session_lifetime = datetime.timedelta(days=365)
 
+
+@app.route("/delete_visits")
+def delete_visits():
+    session.pop('cart')
+    return "ok"
+
+
 def is_authenticated():
     return True if 'loggedin' in session else False
 
@@ -46,6 +53,35 @@ def get_catalog(parent_id):
     products = db.select('SELECT * FROM product')
 
     return render_template('shop/catalog.html', categories=categories, products=products)
+
+
+def cart_session():
+    return True if 'cart' in session else False
+
+
+@app.route('/add_to_cart', methods=['POST'])
+def add_to_cart():
+    product_id = int(request.form.get('product_id'))
+    quantity = int(request.form.get('quantity'))
+
+    if not session.get('cart'):
+        session['cart'] = []
+
+    cart = session["cart"]
+    item_exists = False
+
+    for index, value in enumerate(cart):
+        if value["product_id"] == product_id:
+            cart[index]["quantity"] = cart[index]["quantity"] + quantity
+            item_exists = True
+            break
+
+    if not item_exists:
+        cart.append({'product_id': product_id, 'quantity': quantity})
+
+    session["cart"] = cart
+
+    return redirect(request.referrer)
 
 
 @app.route('/product/<book_id>')
