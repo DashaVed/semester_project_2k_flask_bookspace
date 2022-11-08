@@ -1,0 +1,65 @@
+{% extends 'shop/layout.html' %}
+
+{% block title %}Корзина{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for( 'static', filename='css/cart.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="cart">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="cart-title pt-3 pb-3">
+                    <h1>Корзина</h1>
+                </div>
+            <div class="cart-line"></div>
+                <div class="cart-content d-flex d-flex justify-content-between">
+                    <div class="cart-list">
+                        {% for product in products %}
+                            <div class="cart-product_item pt-3">
+                                <article class="cart-product d-inline-flex">
+                                    <div class="cart-product-image"
+                                         onclick="location.href =
+                                                 '{{ url_for("get_book", book_id=product['product_id']) }}'">
+                                        <img src="{{ url_for( 'static', filename='img/' + product.image) }}"
+                                             alt="{{ product.title }}">
+                                    </div>
+                                    <div class="cart-product-info ms-4 me-4">
+
+                                        <div class="cart-product-text">
+                                            <a class="cart-product-title-link"
+                                           href="{{ url_for("get_book", book_id=product['product_id']) }}">
+                                            {{ product.title }}</a>
+                                            <br>
+                                            <span>{{ product.author }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="cart-product-price">
+                                        <span>{{ product.price| int }} p.</span>
+                                    </div>
+                                    <div class="cart-product-actions">
+
+                                    </div>
+                                </article>
+                            <div class="cart-line pt-3"></div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="cart-sidebar me-4 mt-3">
+                        <div class="cart-order-info p-3 mt-3">
+                            <span class="cart-order-text">Всего товаров:   {{ total_count }}</span>
+                            <br>
+                            <span class="cart-order-text">Общая стоимость:
+                                <span class="cart-order-price">{{ total_amount|int }} p.</span></span>
+                        </div>
+                        <div class="cart-order-btn p-3">
+                            <button>Оформить заказ</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

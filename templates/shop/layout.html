@@ -43,7 +43,7 @@
                         <div class="navbar_search col-auto">
                             <span><i class='bx bx-search'></i></span>
                             <input placeholder="">
-                            <button>Найти</button>
+                            <button type="submit">Найти</button>
                         </div>
                     </div>
                 </form>
@@ -65,12 +65,11 @@
                             <li><a class="dropdown-item small" href="{{ url_for('logout') }}"><h6>Выйти</h6></a></li>
                         </ul>
                     </div>
-                    {#                    <a href="{{ url_for('profile') }}"><i class='bx bx-user-circle'></i></a>#}
                 {% else %}
                     <a href="{{ url_for('login') }}"><i class='bx bx-user-circle'></i></a>
                 {% endif %}
                 <a href="#"><i class='bx bx-heart'></i></a>
-                <a href="#"><i class='bx bx-shopping-bag'></i></a>
+                <a href="{{ url_for('get_cart') }}"><i class='bx bx-shopping-bag'></i></a>
 
             </div>
         </div>

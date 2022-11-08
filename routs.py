@@ -55,10 +55,6 @@ def get_catalog(parent_id):
     return render_template('shop/catalog.html', categories=categories, products=products)
 
 
-def cart_session():
-    return True if 'cart' in session else False
-
-
 @app.route('/add_to_cart', methods=['POST'])
 def add_to_cart():
     product_id = int(request.form.get('product_id'))
@@ -106,9 +102,20 @@ def order():
     return render_template('shop/order.html')
 
 
-@app.route('/cart')
+@app.route('/cart', methods=['GET', 'POST'])
 def get_cart():
-    ...
+    products = []
+    total_amount = 0
+    total_count = 0
+    if 'cart' in session:
+        total_count = len(session['cart'])
+        for item in session['cart']:
+            product = db.select('SELECT product_id, title, author, price, image FROM product WHERE product_id = %s',
+                                values=(item['product_id'], ))
+            total_amount += product['price'] * item['quantity']
+            product['quantity'] = item['quantity']
+            products.append(product)
+    return render_template('shop/cart.html', products=products, total_count=total_count, total_amount=total_amount)
 
 
 @app.route('/registration', methods=['GET', 'POST'])

@@ -61,7 +61,7 @@ body{
 .navbar .navbar_search{
 
     vertical-align: middle;
-    border: 2px solid #D2D68D;
+    border: 2px solid #DCDCDC;
     width: 710px;
     height: 40px;
     border-radius: 3px;
@@ -84,7 +84,7 @@ body{
 .navbar .input-control_container .navbar_search button{
     float: right;
     width: 100px;
-    border: 1px solid #D2D68D;
+    border: 1px solid #DCDCDC;
     background: #D2D68D;
     color: #F4FEC1;
     font-size: 16px;
@@ -187,7 +187,7 @@ body{
 }
 
 .line{
-    border-bottom: 2px solid #D2D68D;
+    border-bottom: 2px solid #DCDCDC;
 }
 
 .banner img{
