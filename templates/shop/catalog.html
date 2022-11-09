@@ -54,9 +54,8 @@
                                                     <span>{{ product.author }}</span>
                                                 </div>
                                                 <div class="product-card-buttons d-flex">
-                                                    <form action="{{ url_for('add_to_cart') }}" method="post">
-                                                        <input type="hidden" name="product_id"
-                                                               value="{{ product.product_id }}">
+                                                    <form action="{{ url_for('change_quantity', product_id=product.product_id) }}"
+                                                     method="post">
                                                         <input type="hidden" name="quantity"
                                                                value="1" min="1" max="{{ product.quantity }}">
                                                         <button type="submit" class="b24-btn product-card__add-to-cart">

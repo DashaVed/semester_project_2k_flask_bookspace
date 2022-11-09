@@ -55,10 +55,10 @@ def get_catalog(parent_id):
     return render_template('shop/catalog.html', categories=categories, products=products)
 
 
-@app.route('/add_to_cart', methods=['POST'])
-def add_to_cart():
-    product_id = int(request.form.get('product_id'))
+@app.route('/change_quantity/<int:product_id>', methods=['POST'])
+def change_quantity(product_id):
     quantity = int(request.form.get('quantity'))
+    print(quantity)
 
     if not session.get('cart'):
         session['cart'] = []
@@ -68,12 +68,15 @@ def add_to_cart():
 
     for index, value in enumerate(cart):
         if value["product_id"] == product_id:
-            cart[index]["quantity"] = cart[index]["quantity"] + quantity
+            if not 'check' in request.form:
+                cart[index]["count"] += quantity
+            else:
+                cart[index]["count"] = quantity
             item_exists = True
             break
 
     if not item_exists:
-        cart.append({'product_id': product_id, 'quantity': quantity})
+        cart.append({'product_id': product_id, 'count': quantity})
 
     session["cart"] = cart
 
@@ -110,10 +113,10 @@ def get_cart():
     if 'cart' in session:
         total_count = len(session['cart'])
         for item in session['cart']:
-            product = db.select('SELECT product_id, title, author, price, image FROM product WHERE product_id = %s',
+            product = db.select('SELECT product_id, title, author, price, quantity, image FROM product WHERE product_id = %s',
                                 values=(item['product_id'], ))
-            total_amount += product['price'] * item['quantity']
-            product['quantity'] = item['quantity']
+            total_amount += product['price'] * item['count']
+            product['count'] = item['count']
             products.append(product)
     return render_template('shop/cart.html', products=products, total_count=total_count, total_amount=total_amount)
 

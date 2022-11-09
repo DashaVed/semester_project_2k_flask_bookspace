@@ -23,7 +23,7 @@ h1 {
 
 .cart-product-info {
     display: flex;
-    width: 240px;
+    width: 280px;
 
 }
 
@@ -52,13 +52,45 @@ h1 {
     font-size: 14px;
 }
 
-.cart-product-price, .cart-order-price {
+.cart-product-price {
     margin-top: auto;
     margin-bottom: auto;
+    width: 100px;
+    text-align: center;
     font-family: montserrat, sans-serif;
     font-weight: 700;
     color: #FF9F1C;
     font-size: 20px;
+}
+
+.cart-product-actions {
+    display: flex;
+}
+
+.cart-product-count {
+    margin: auto;
+    height: 34px;
+}
+
+.count-button{
+    margin: auto;
+    width: auto;
+    border: none;
+    background: white;
+}
+
+.count-value {
+    width: 60px;
+    text-align: center;
+    border: white;
+    border-radius: 3px;
+    background-color: whitesmoke;
+}
+
+/*убрать стрелки в input*/
+.count-value::-webkit-outer-spin-button,
+.count-value::-webkit-inner-spin-button {
+    -webkit-appearance: none;
 }
 
 .cart-line {
@@ -83,10 +115,17 @@ h1 {
     font-size: 16px;
 }
 
+.cart-order-price {
+    font-family: montserrat, sans-serif;
+    font-weight: 700;
+    color: #FF9F1C;
+    font-size: 20px;
+}
+
 .cart-order-btn {
     text-align: center;
 }
-button{
+.cart-order-btn button{
     width: 200px;
     height: 40px;
     border: 1px solid #D2D68D;
@@ -96,3 +135,4 @@ button{
     font-size: 16px;
     font-weight: 500;
 }
+/*END SIDEBAR*/
