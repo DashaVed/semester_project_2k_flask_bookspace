@@ -93,6 +93,27 @@ h1 {
     -webkit-appearance: none;
 }
 
+.cart-product-delete {
+    text-align: center;
+}
+
+.delete-btn {
+    height: 24px;
+    font-family: montserrat, sans-serif;
+    font-weight: 500;
+    color: #28231D;
+    font-size: 14px;
+}
+
+.delete-btn:hover {
+    text-decoration: underline;
+}
+
+.delete-btn:focus {
+    border: none;
+    text-decoration: underline;
+}
+
 .cart-line {
     border-bottom: 1px solid #DCDCDC;
 }

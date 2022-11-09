@@ -16,57 +16,64 @@
                 <div class="cart-line"></div>
                 <div class="cart-content d-flex d-flex justify-content-between">
                     <div class="cart-list">
-                    <p>{{ session['cart'] }}</p>
                         {% for product in products %}
                             <div class="cart-product_item pt-3">
-                                <article class="cart-product d-inline-flex">
-                                    <div class="cart-product-image"
-                                         onclick="location.href =
-                                                 '{{ url_for("get_book", book_id=product['product_id']) }}'">
-                                        <img src="{{ url_for( 'static', filename='img/' + product.image) }}"
-                                             alt="{{ product.title }}">
+                                <div class="cart-product-btn d-flex justify-content-end me-4">
+                                    <div class="cart-product-wishes me-3">
+                                        <span><i class='bx bx-heart mt-1'></i></span>
                                     </div>
-                                    <div class="cart-product-info ms-4 me-4">
-
-                                        <div class="cart-product-text">
-                                            <a class="cart-product-title-link"
-                                               href="{{ url_for("get_book", book_id=product['product_id']) }}">
-                                                {{ product.title }}</a>
-                                            <br>
-                                            <span>{{ product.author }}</span>
+                                    <form method="post"
+                                          action="{{ url_for('delete_item', product_id=product.product_id) }}">
+                                        <div class="cart-product-delete">
+                                            <button class="btn delete-btn p-0">Удалить</button>
                                         </div>
-                                    </div>
-                                    <div class="cart-product-price">
-                                        <span>{{ product.price| int }} p.</span>
-                                    </div>
-                                    <div class="cart-product-actions ms-5 ps-3">
-                                        <div class="cart-product-count d-inline-flex">
-                                            <form action="{{ url_for('change_quantity', product_id=product.product_id) }}"
-                                                  method="post">
-                                                <input type="hidden" name="quantity" value="-1">
-                                                <button type="submit" class="count-button"><i class='bx bx-minus'></i>
-                                                </button>
-                                            </form>
-                                            <form action="{{ url_for('change_quantity', product_id=product.product_id) }}"
-                                                  method="post">
-                                                <input type="number" class="count-value" name="quantity"
-                                                       value="{{ product.count }}" min="1" max="{{ product.quantity }}">
-                                                <input type="submit" hidden name="check" />
-                                            </form>
-                                            <form action="{{url_for('change_quantity', product_id=product.product_id)}}"
-                                                  method="post">
-                                                <input type="hidden" name="quantity" value="1">
-                                                <button type="submit" class="count-button"><i class='bx bx-plus'></i>
-                                                </button>
-                                            </form>
-
-
-                                        </div>
-
-                                    </div>
-                                </article>
-                                <div class="cart-line pt-3"></div>
+                                    </form>
+                                </div>
                             </div>
+                            <article class="cart-product d-inline-flex">
+                                <div class="cart-product-image"
+                                     onclick="location.href =
+                                             '{{ url_for("get_book", book_id=product['product_id']) }}'">
+                                    <img src="{{ url_for( 'static', filename='img/' + product.image) }}"
+                                         alt="{{ product.title }}">
+                                </div>
+                                <div class="cart-product-info ms-4 me-4">
+
+                                    <div class="cart-product-text">
+                                        <a class="cart-product-title-link"
+                                           href="{{ url_for("get_book", book_id=product['product_id']) }}">
+                                            {{ product.title }}</a>
+                                        <br>
+                                        <span>{{ product.author }}</span>
+                                    </div>
+                                </div>
+                                <div class="cart-product-price">
+                                    <span>{{ product.price| int }} p.</span>
+                                </div>
+                                <div class="cart-product-actions ms-5 ps-3">
+                                    <div class="cart-product-count d-inline-flex">
+                                        <form action="{{ url_for('change_quantity', product_id=product.product_id) }}"
+                                              method="post">
+                                            <input type="hidden" name="quantity" value="-1">
+                                            <button type="submit" class="count-button"><i class='bx bx-minus'></i>
+                                            </button>
+                                        </form>
+                                        <form action="{{ url_for('change_quantity', product_id=product.product_id) }}"
+                                              method="post">
+                                            <input type="number" class="count-value" name="quantity"
+                                                   value="{{ product.count }}" min="1" max="{{ product.quantity }}">
+                                            <input type="submit" hidden name="check"/>
+                                        </form>
+                                        <form action="{{ url_for('change_quantity', product_id=product.product_id) }}"
+                                              method="post">
+                                            <input type="hidden" name="quantity" value="1">
+                                            <button type="submit" class="count-button"><i class='bx bx-plus'></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </article>
+                            <div class="cart-line pt-3"></div>
                         {% endfor %}
                     </div>
                     <div class="cart-sidebar me-4 mt-3">
@@ -74,7 +81,7 @@
                             <span class="cart-order-text">Всего товаров: {{ total_count }}</span>
                             <br>
                             <span class="cart-order-text">Общая стоимость:
-                                <span class="cart-order-price">{{ total_amount|int }} p.</span></span>
+                                    <span class="cart-order-price">{{ total_amount|int }} p.</span></span>
                         </div>
                         <div class="cart-order-btn p-3">
                             <button>Оформить заказ</button>

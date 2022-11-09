@@ -68,7 +68,7 @@ def change_quantity(product_id):
 
     for index, value in enumerate(cart):
         if value["product_id"] == product_id:
-            if not 'check' in request.form:
+            if 'check' not in request.form:
                 cart[index]["count"] += quantity
             else:
                 cart[index]["count"] = quantity
@@ -81,6 +81,20 @@ def change_quantity(product_id):
     session["cart"] = cart
 
     return redirect(request.referrer)
+
+
+@app.route('/delete-item/<int:product_id>', methods=['POST'])
+def delete_item(product_id):
+    cart = session["cart"]
+
+    for value in cart:
+        if value["product_id"] == product_id:
+            cart.remove(value)
+            break
+
+    session["cart"] = cart
+    return redirect(request.referrer)
+
 
 
 @app.route('/product/<book_id>')
@@ -113,8 +127,9 @@ def get_cart():
     if 'cart' in session:
         total_count = len(session['cart'])
         for item in session['cart']:
-            product = db.select('SELECT product_id, title, author, price, quantity, image FROM product WHERE product_id = %s',
-                                values=(item['product_id'], ))
+            product = db.select(
+                'SELECT product_id, title, author, price, quantity, image FROM product WHERE product_id = %s',
+                values=(item['product_id'],))
             total_amount += product['price'] * item['count']
             product['count'] = item['count']
             products.append(product)
