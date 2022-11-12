@@ -156,4 +156,11 @@ h1 {
     font-size: 16px;
     font-weight: 500;
 }
+
+.cart-order-btn button a {
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+}
 /*END SIDEBAR*/

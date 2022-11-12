@@ -10,6 +10,7 @@
     <div class="cart">
         <div class="container-fluid">
             <div class="row">
+            {{ session }}
                 <div class="cart-title pt-3 pb-3">
                     <h1>Корзина</h1>
                 </div>
@@ -84,7 +85,13 @@
                                     <span class="cart-order-price">{{ total_amount|int }} p.</span></span>
                         </div>
                         <div class="cart-order-btn p-3">
-                            <button>Оформить заказ</button>
+                            <button>
+                                {% if is_authenticated %}
+                                    <a href="{{ url_for('make_order') }}">Оформить заказ</a>
+                                {% else %}
+                                    <a href="{{ url_for('login') }}">Оформить заказ</a>
+                                {% endif %}
+                            </button>
                         </div>
                     </div>
                 </div>

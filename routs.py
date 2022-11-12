@@ -1,5 +1,5 @@
 import re
-import datetime
+from datetime import datetime, timedelta
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_uploads import IMAGES, UploadSet, configure_uploads, patch_request_class
@@ -20,11 +20,11 @@ patch_request_class(app)
 db = Database()
 
 app.secret_key = 'bookspace-semester-project'
-app.permanent_session_lifetime = datetime.timedelta(days=365)
+app.permanent_session_lifetime = timedelta(days=365)
 
 
 @app.route("/delete_visits")
-def delete_visits():
+def clear_cart():
     session.pop('cart')
     return "ok"
 
@@ -52,7 +52,8 @@ def get_catalog(parent_id):
         categories = db.select('SELECT * FROM category WHERE category_parent_id is NULL')
     products = db.select('SELECT * FROM product')
 
-    return render_template('shop/catalog.html', categories=categories, products=products)
+    return render_template('shop/catalog.html', categories=categories, products=products,
+                           is_authenticated=is_authenticated())
 
 
 @app.route('/change_quantity/<int:product_id>', methods=['POST'])
@@ -96,11 +97,10 @@ def delete_item(product_id):
     return redirect(request.referrer)
 
 
-
 @app.route('/product/<book_id>')
 def get_book(book_id):
     book = db.select('SELECT * FROM product WHERE product_id = %s', (book_id,))
-    return render_template('shop/book.html', book=book)
+    return render_template('shop/book.html', book=book, is_authenticated=is_authenticated())
 
 
 @app.route('/personal/profile', methods=['GET', 'POST'])
@@ -116,7 +116,48 @@ def profile():
 
 @app.route('/personal/order')
 def order():
-    return render_template('shop/order.html')
+    return render_template('shop/order.html', is_authenticated=is_authenticated())
+
+
+def order_line(order_id):
+    cart = session['cart']
+    for item in cart:
+        db.update('UPDATE product SET quantity = quantity - %s WHERE product_id = %s',
+                  values=(item['count'], item['product_id'],))
+        price = db.select('SELECT price FROM product WHERE product_id = %s', values=(item['product_id'],))
+        db.insert('INSERT INTO order_line(order_id, product_id, quantity, price) VALUES(%s, %s, %s, %s)',
+                  values=(order_id, item['product_id'], item['count'], price['price']))
+
+
+@app.route('/personal/order/make', methods=['GET', 'POST'])
+def make_order():
+    total_amount = 0
+    total_count = 0
+    if 'cart' in session:
+        total_count = len(session['cart'])
+        for item in session['cart']:
+            product = db.select('SELECT product_id, price FROM product WHERE product_id = %s',
+                                values=(item['product_id'],))
+            total_amount += product['price'] * item['count']
+
+    user_id = session['id']
+    user = db.select('SELECT first_name, last_name, email, phone FROM account WHERE user_id = %s',
+                     values=(user_id,))
+
+    if request.method == 'POST':
+        address = request.form.get('address')
+        current_date = datetime.today().strftime('%Y-%m-%d')
+        delivery_date = datetime.now() + timedelta(days=7)
+        order_id = db.get_insert(
+            'INSERT INTO shop_order(user_id, created_date, delivery_date, delivery_address, status, total_amount)'
+            'VALUES (%s, %s, %s, %s, %s, %s)  RETURNING order_id',
+            values=(user_id, current_date, delivery_date, address, 'Сформирован', total_amount))
+        if order_id:
+            flash('Заказ успешно сформирован и оплачен')
+            order_line(order_id)
+            clear_cart()
+    return render_template('shop/order_form.html', total_amount=total_amount, total_count=total_count, user=user,
+                           is_authenticated=is_authenticated())
 
 
 @app.route('/cart', methods=['GET', 'POST'])
@@ -133,7 +174,8 @@ def get_cart():
             total_amount += product['price'] * item['count']
             product['count'] = item['count']
             products.append(product)
-    return render_template('shop/cart.html', products=products, total_count=total_count, total_amount=total_amount)
+    return render_template('shop/cart.html', products=products, total_count=total_count, total_amount=total_amount,
+                           is_authenticated=is_authenticated())
 
 
 @app.route('/registration', methods=['GET', 'POST'])
@@ -230,32 +272,32 @@ def add_product():
 
 @app.route('/delivery')
 def delivery():
-    return render_template('shop/delivery.html')
+    return render_template('shop/delivery.html', is_authenticated=is_authenticated())
 
 
 @app.route('/about-us')
 def about_us():
-    return render_template('shop/about_us.html')
+    return render_template('shop/about_us.html', is_authenticated=is_authenticated())
 
 
 @app.route('/sales')
 def get_sales():
-    return render_template('shop/sales.html')
+    return render_template('shop/sales.html', is_authenticated=is_authenticated())
 
 
 @app.route('/new')
 def get_new():
-    return render_template('shop/new.html')
+    return render_template('shop/new.html', is_authenticated=is_authenticated())
 
 
 @app.route('/bestsellery')
 def get_bestsellery():
-    return render_template('shop/bestsellery.html')
+    return render_template('shop/bestsellery.html', is_authenticated=is_authenticated())
 
 
 @app.route('/best-price')
 def get_best_price():
-    return render_template('shop/best_price.html')
+    return render_template('shop/best_price.html', is_authenticated=is_authenticated())
 
 
 if __name__ == '__main__':

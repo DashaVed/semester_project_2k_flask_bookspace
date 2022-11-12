@@ -31,7 +31,8 @@ class Database:
         return data
 
     def update(self, query, values):
-        ...
+        self.cur.execute(query, values)
+        self.con.commit()
 
     def prepare_data(self, data):
         prepare_data = []

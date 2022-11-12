@@ -1,0 +1,155 @@
+.row {
+    margin-left: 100px;
+    margin-right: 100px;
+}
+
+.line {
+    border-bottom: 1px solid #DCDCDC;
+}
+
+.navbar-info {
+    display: flex;
+}
+
+h1 {
+    margin: auto;
+    font-family: montserrat, sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    color: #28231D;
+    font-size: 26px;
+}
+
+.top-nav {
+    padding-bottom: 4px;
+    padding-top: 4px;
+}
+
+.top-nav .nav-item {
+    margin-bottom: 0;
+    margin-right: 22px;
+    display: inline-block;
+    font-size: 12px;
+    color: #28231D;
+}
+
+.top-nav .nav-item:hover {
+    color: #28231D;
+    text-decoration: underline;
+}
+
+.fill-height {
+    height: 60px !important;
+}
+
+.navbar .navbar-logo {
+    margin: auto;
+    height: auto;
+    color: #FF9F1C;
+    text-decoration: none;
+    font-size: 40px;
+    font-weight: 700;
+}
+
+.order-title {
+
+}
+
+.order-info {
+    width: 540px;
+}
+
+/*START ORDER CONTENT*/
+.bx-chevron-left {
+    vertical-align: middle;
+}
+
+h6 {
+    font-family: montserrat, sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    color: #28231D;
+    font-size: 20px;
+}
+
+label {
+    font-family: montserrat, sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    color: #28231D;
+    font-size: 14px;
+}
+
+.recipient-info-name {
+    width: 260px;
+}
+
+.return-to-cart a {
+    font-family: montserrat, sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    color: #28231D;
+    font-size: 16px;
+    text-decoration: none;
+}
+
+.return-to-cart a:hover {
+    text-decoration: underline;
+}
+
+/*END ORDER CONTENT*/
+
+/*START SIDEBAR*/
+.cart-sidebar {
+    width: 460px;
+    align-items: center;
+}
+
+.cart-sidebar-content {
+    margin: auto;
+    width: 250px !important;
+    height: 200px;
+    border: 1px solid #DCDCDC;
+    border-radius: 3px;
+    justify-content: center;
+}
+
+.cart-order-text {
+    margin-top: 10px;
+    font-family: montserrat, sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    color: #28231D;
+    font-size: 16px;
+}
+
+.cart-order-price {
+    font-family: montserrat, sans-serif;
+    font-weight: 700;
+    color: #FF9F1C;
+    font-size: 20px;
+}
+
+.cart-order-btn, .order-button {
+    text-align: center;
+}
+
+.cart-order-btn button, .order-button button {
+    width: 200px;
+    height: 40px;
+    border: 1px solid #D2D68D;
+    border-radius: 3px;
+    background: #D2D68D;
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.cart-order-btn button a, .order-button button a {
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+/*END SIDEBAR*/
