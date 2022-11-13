@@ -1,0 +1,45 @@
+{% extends 'shop/personal/personal.html' %}
+
+{% block title %}Заказы - Boookspace{% endblock %}
+
+{% block profile_style %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for( 'static', filename='css/order.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="order-content">
+        <h5>Мои заказы</h5>
+        {% for order in orders %}
+            <section class="order-item mb-5">
+                <div class="order-header d-flex">
+                    <div class="order-header-first m-3">
+                        <div class="header-data d-flex justify-content-between">
+                            <span>Заказ от {{ order.created_date }}</span>
+                            <span class="order-status">{{ order.status }}</span>
+                        </div>
+                        <div class="header-id d-flex"><span>Код заказа: {{ order.order_id }}</span></div>
+                    </div>
+                    <div class="order-header-second d-flex justify-content-end">
+                        <div class="header-amount d-flex m-3">
+                            <span>оплачено <span class="header-price">{{ order.total_amount|int }} р.</span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="order-line"></div>
+                <div class="order-info">
+                    <dl class="order-info_content d-grid justify-content-between  m-3">
+                        <dt>Способ оплаты:</dt>
+                        <dd>Оплата банковской картой на сайте (Visa, MasterCard, МИР)</dd>
+                        <dt>Адрес доставки:</dt>
+                        <dd>{{ order.delivery_address }}</dd>
+                        <dt>Получатель:</dt>
+                        <dd>{{ user.first_name }} {{ user.last_name }}</dd>
+                        <dt>Телефон для связи:</dt>
+                        <dd>{{ user.phone }}</dd>
+                    </dl>
+                </div>
+            </section>
+
+        {% endfor %}
+    </div>
+{% endblock %}

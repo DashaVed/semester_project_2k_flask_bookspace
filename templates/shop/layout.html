@@ -57,8 +57,10 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                             <li><a class="dropdown-item " href="{{ url_for('profile') }}"><h6>Профиль</h6></a></li>
-                            <li><a class="dropdown-item small" href="#"><h6>Мои заказы</h6></a></li>
-                            <li><a class="dropdown-item small" href="#"><h6>Отложенные</h6></a></li>
+                            <li><a class="dropdown-item small" href="{{ url_for('order') }}">
+                                <h6>Мои заказы</h6></a></li>
+                            <li><a class="dropdown-item small" href="{{ url_for('wishlist') }}">
+                                <h6>Отложенные</h6></a></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>

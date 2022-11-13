@@ -1,4 +1,10 @@
-{% extends "shop/personal.html" %}
+{% extends "shop/personal/personal.html" %}
+
+{% block title %}Личный кабинет{% endblock %}
+
+{% block profile_style %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for( 'static', filename='css/profile.css') }}">
+{% endblock %}
 
 {% block body %}
     <div class="profile-content">

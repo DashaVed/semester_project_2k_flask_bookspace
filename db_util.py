@@ -15,9 +15,6 @@ class Database:
     def select(self, query, values=()):
         self.cur.execute(query, values)
         data = self.prepare_data(self.cur.fetchall())
-        if len(data) == 1:
-            data = data[0]
-
         return data
 
     def insert(self, query, values):

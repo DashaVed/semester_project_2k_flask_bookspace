@@ -69,27 +69,51 @@ def change_quantity(product_id):
     quantity = int(request.form.get('quantity'))
 
     if is_authenticated():
-        db_cart = db.select('SELECT cart_id FROM cart WHERE user_id = %s', values=(session['id'],))
-        cart = db.select('SELECT product_id, qty FROM cart_item WHERE cart_id = %s', (db_cart['cart_id'],))
-
-        if cart:
-            if 'check' not in request.form:
-                db.update('UPDATE cart_item SET qty = qty + %s WHERE product_id = %s', values=(quantity, product_id))
-            else:
-                db.update('UPDATE cart_item SET qty = %s WHERE product_id = %s', values=(quantity, product_id))
+        db_cart = db.select('SELECT cart_id FROM cart WHERE user_id = %s', values=(session['id'],))[0]
+        if 'check' not in request.form:
+            db.update('UPDATE cart_item SET qty = qty + %s WHERE cart_id = %s AND product_id = %s',
+                      values=(quantity, db_cart['cart_id'], product_id))
         else:
-            db.insert('INSERT INTO cart_item (cart_id, product_id, qty) VALUES (%s, %s, %s)',
-                      values=(db_cart['cart_id'], product_id, quantity))
+            db.update('UPDATE cart_item SET qty = %s WHERE cart_id = %s AND product_id = %s',
+                      values=(quantity, db_cart['cart_id'], product_id))
+
     else:
         cart = session["cart"]
-        item_exists = False
-
         for index, value in enumerate(cart):
             if value["product_id"] == product_id:
                 if 'check' not in request.form:
                     cart[index]["qty"] += quantity
                 else:
                     cart[index]["qty"] = quantity
+                break
+        session["cart"] = cart
+
+    return redirect(request.referrer)
+
+
+@app.route('/add-to-cart/<int:product_id>', methods=['POST'])
+def add_to_cart(product_id):
+    quantity = int(request.form.get('quantity'))
+
+    if is_authenticated():
+        db_cart = db.select('SELECT cart_id FROM cart WHERE user_id = %s', values=(session['id'],))[0]
+        cart = db.select('SELECT product_id, qty FROM cart_item WHERE cart_id = %s AND product_id= %s',
+                         (db_cart['cart_id'], product_id))
+        if cart:
+            db.update('UPDATE cart_item SET qty = qty + 1 WHERE product_id = %s', values=(product_id,))
+        else:
+            db.insert('INSERT INTO cart_item (cart_id, product_id, qty) VALUES (%s, %s, %s)',
+                      values=(db_cart['cart_id'], product_id, quantity))
+    else:
+        if 'cart' not in session:
+            session['cart'] = []
+
+        cart = session["cart"]
+        item_exists = False
+
+        for index, value in enumerate(cart):
+            if value["product_id"] == product_id:
+                cart[index]["qty"] = quantity
                 item_exists = True
                 break
 
@@ -117,7 +141,7 @@ def delete_item(product_id):
 
 @app.route('/product/<book_id>')
 def get_book(book_id):
-    book = db.select('SELECT * FROM product WHERE product_id = %s', (book_id,))
+    book = db.select('SELECT * FROM product WHERE product_id = %s', (book_id,))[0]
     return render_template('shop/book.html', book=book, is_authenticated=is_authenticated())
 
 
@@ -125,25 +149,29 @@ def get_book(book_id):
 def profile():
     is_auth = is_authenticated()
     if is_auth:
-        user = db.select('SELECT * FROM account WHERE user_id = %s', values=(session['id'],))
+        user = db.select('SELECT * FROM account WHERE user_id = %s', values=(session['id'],))[0]
         form = RegistrationForm()
         if request.method == 'POST':
             pass
-        return render_template('shop/profile.html', is_authenticated=is_auth, user=user, form=form)
+        return render_template('shop/personal/profile.html', is_authenticated=is_auth, user=user, form=form)
 
 
 @app.route('/personal/order')
 def order():
-    return render_template('shop/order.html', is_authenticated=is_authenticated())
+    is_auth = is_authenticated()
+    if is_auth:
+        user = db.select('SELECT * FROM account WHERE user_id = %s', values=(session['id'],))[0]
+        orders = db.select('SELECT * FROM shop_order WHERE user_id = %s', values=(session['id'],))
+        return render_template('shop/personal/order.html', is_authenticated=is_auth, user=user, orders=orders)
 
 
 def order_line(order_id):
-    db_cart = db.select('SELECT cart_id FROM cart WHERE user_id = %s', values=(session['id'],))
+    db_cart = db.select('SELECT cart_id FROM cart WHERE user_id = %s', values=(session['id'],))[0]
     cart = db.select('SELECT product_id, qty FROM cart_item WHERE cart_id = %s', (db_cart['cart_id'],))
     for item in cart:
         db.update('UPDATE product SET quantity = quantity - %s WHERE product_id = %s',
                   values=(item['qty'], item['product_id'],))
-        price = db.select('SELECT price FROM product WHERE product_id = %s', values=(item['product_id'],))
+        price = db.select('SELECT price FROM product WHERE product_id = %s', values=(item['product_id'],))[0]
         db.insert('INSERT INTO order_line(order_id, product_id, quantity, price) VALUES(%s, %s, %s, %s)',
                   values=(order_id, item['product_id'], item['qty'], price['price']))
 
@@ -152,17 +180,17 @@ def order_line(order_id):
 def make_order():
     is_auth = is_authenticated()
     total_amount = 0
-    db_cart = db.select('SELECT cart_id FROM cart WHERE user_id = %s', values=(session['id'],))
+    db_cart = db.select('SELECT cart_id FROM cart WHERE user_id = %s', values=(session['id'],))[0]
     cart_item = db.select('SELECT product_id, qty FROM cart_item WHERE cart_id = %s', (db_cart['cart_id'],))
     total_count = len(cart_item)
     for item in cart_item:
         product = db.select('SELECT product_id, price FROM product WHERE product_id = %s',
-                            values=(item['product_id'],))
+                            values=(item['product_id'],))[0]
         total_amount += product['price'] * item['qty']
 
     user_id = session['id']
     user = db.select('SELECT first_name, last_name, email, phone FROM account WHERE user_id = %s',
-                     values=(user_id,))
+                     values=(user_id,))[0]
 
     if request.method == 'POST':
         address = request.form.get('address')
@@ -179,8 +207,32 @@ def make_order():
                 db.delete('cart_item')
             else:
                 clear_cart()
-    return render_template('shop/order_form.html', total_amount=total_amount, total_count=total_count, user=user,
+    return render_template('shop/personal/order_form.html', total_amount=total_amount, total_count=total_count, user=user,
                            is_authenticated=is_auth)
+
+
+@app.route('/personal/wishlist', methods=['GET', 'POST'])
+def wishlist():
+    ...
+
+
+@app.route('/add-to-wishlist/<int:product_id>', methods=['POST'])
+def add_to_wishlist(product_id):
+    user_wishlist = db.select('SELECT wishlist_id FROM wishlist WHERE user_id = %s', values=(session['id'],))[0]
+    products_id = db.select('SELECT product_id FROM wishlist_item WHERE wishlist_id = %s',
+                            values=(user_wishlist['wishlist_id'],))
+
+    item_exist = False
+    if products_id:
+        for item in products_id:
+            if item['product_id'] == product_id:
+                item_exist = True
+                break
+
+    if not item_exist:
+        db.insert('INSERT INTO wishlist_item(wishlist_id, product_id) VALUES (%s, %s)',
+                  values=(user_wishlist['wishlist_id'], product_id, ))
+        return redirect(request.referrer)
 
 
 def get_product(products, cart):
@@ -188,7 +240,7 @@ def get_product(products, cart):
     for item in cart:
         product = db.select(
             'SELECT product_id, title, author, price, quantity, image FROM product WHERE product_id = %s',
-            values=(item['product_id'],))
+            values=(item['product_id'],))[0]
         repeated_product = list(filter(lambda x: x['product_id'] == product['product_id'], products))
         if repeated_product:
             product['qty'] += item['qty']
@@ -196,7 +248,6 @@ def get_product(products, cart):
             product['qty'] = item['qty']
             products.append(product)
         amount += product['price'] * product['qty']
-    print('товары', products)
     return amount
 
 
@@ -207,7 +258,7 @@ def get_cart():
     total_count = 0
     is_auth = is_authenticated()
     if is_auth:
-        db_cart = db.select('SELECT cart_id FROM cart WHERE user_id = %s', values=(session['id'],))
+        db_cart = db.select('SELECT cart_id FROM cart WHERE user_id = %s', values=(session['id'],))[0]
         cart_item = db.select('SELECT product_id, qty FROM cart_item WHERE cart_id = %s', (db_cart['cart_id'],))
         if cart_item:
             total_count += len(cart_item)
@@ -219,8 +270,8 @@ def get_cart():
             for item in session['cart']:
                 db.insert('INSERT INTO cart_item (cart_id, product_id, qty) VALUES (%s, %s, %s)',
                           values=(db_cart['cart_id'], item['product_id'], item['qty']))
-        clear_cart()
-    return render_template('shop/cart.html', products=products, total_count=total_count, total_amount=total_amount,
+            clear_cart()
+    return render_template('shop/personal/cart.html', products=products, total_count=total_count, total_amount=total_amount,
                            is_authenticated=is_auth)
 
 
@@ -235,7 +286,7 @@ def registration():
 
         _hashed_password = generate_password_hash(password)
 
-        user = db.select('SELECT * FROM account WHERE email= %s', values=(email,))
+        user = db.select('SELECT * FROM account WHERE email= %s', values=(email,))[0]
         phones = db.select('SELECT phone FROM account WHERE phone= %s', values=(phone,))
         if user:
             flash('Аккаунт с таким email уже существует')
@@ -252,13 +303,14 @@ def registration():
                       ' VALUES (%s, %s, %s, %s, %s)',
                       values=(first_name, last_name, phone, email, _hashed_password))
             db.insert('INSERT INTO cart(user_id) VALUES (%s)', values=(user['user_id'],))
-            user = db.select('SELECT * FROM account WHERE email= %s', values=(email,))
+            db.insert('INSERT INTO wishlist(user_id) VALUES (%s)', values=(user['user_id'],))
+            user = db.select('SELECT * FROM account WHERE email= %s', values=(email,))[0]
             session['loggedin'] = True
             session['id'] = user['user_id']
             session['email'] = user['email']
             return redirect(url_for('main'))
 
-    return render_template('shop/registration.html')
+    return render_template('shop/auth/registration.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -267,7 +319,7 @@ def login():
         email = request.form.get('email')
         password = request.form.get('password')
 
-        user = db.select("SELECT * FROM account WHERE email= %s", values=(email,))
+        user = db.select("SELECT * FROM account WHERE email= %s", values=(email,))[0]
         if user:
             password_rs = user['password']
             if check_password_hash(password_rs, password):
@@ -277,7 +329,7 @@ def login():
                 return redirect(url_for('main'))
 
         flash('Неправильный логин или пароль. Попробуйте еще раз.')
-    return render_template('shop/authorization.html')
+    return render_template('shop/auth/authorization.html')
 
 
 @app.route('/logout', methods=['GET', 'POST'])
@@ -314,7 +366,7 @@ def add_product():
             db.insert('INSERT INTO product_label (product_id, label_id) VALUES (%s, %s)',
                       values=(product_id, label_id,))
         flash('Товар успешно добавлен')
-    return render_template('shop/product_form.html', form=form, categories=categories, labels=labels)
+    return render_template('shop/admin/product_form.html', form=form, categories=categories, labels=labels)
 
 
 @app.route('/delivery')

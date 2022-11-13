@@ -1,0 +1,52 @@
+/*START SIDEBAR*/
+
+.profile-nav {
+    min-width: 200px;
+    height: auto !important;
+    border: 1px solid #DCDCDC;
+    border-radius: 3px;
+
+}
+
+.profile-nav_title {
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
+
+.profile-nav-name {
+    font-size: 16px;
+    font-family: montserrat, sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    color: #28231D;
+}
+
+.profile-nav-author {
+    font-size: 12px;
+    font-family: montserrat, sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    color: #28231D;
+}
+
+.profile-nav_item {
+    list-style-type: none;
+    margin-bottom: 10px;
+}
+
+.profile-nav_link {
+    font-size: 16px;
+    font-family: montserrat, sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    color: #28231D;
+    text-decoration: none;
+}
+
+.profile-nav_link:hover {
+    color: #FF9F1C;
+    font-weight: 600;
+}
+
+/*END SIDEBAR*/

@@ -54,7 +54,7 @@
                                                     <span>{{ product.author }}</span>
                                                 </div>
                                                 <div class="product-card-buttons d-flex">
-                                                    <form action="{{ url_for('change_quantity', product_id=product.product_id) }}"
+                                                    <form action="{{ url_for('add_to_cart', product_id=product.product_id) }}"
                                                      method="post">
                                                         <input type="hidden" name="quantity"
                                                                value="1" min="1" max="{{ product.quantity }}">
@@ -62,12 +62,20 @@
                                                             В корзину
                                                         </button>
                                                     </form>
-
-                                                    <button type="button"
-                                                            class="product-card__add-favorites justify-content-end">
-                                                        <i class='bx bx-heart'></i>
-                                                    </button>
-
+                                                    {% if is_authenticated %}
+                                                        <form action="{{ url_for('add_to_wishlist', product_id=product.product_id) }}" method="post">
+                                                        <button type="submit"
+                                                                class="product-card__add-favorites justify-content-end">
+                                                            <i class='bx bx-heart'></i>
+                                                        </button>
+                                                        </form>
+                                                    {% else %}
+                                                        <button type="button"
+                                                                class="product-card__add-favorites justify-content-end">
+                                                            <a href="{{ url_for('login') }}">
+                                                                <i class='bx bx-heart'></i></a>
+                                                        </button>
+                                                    {% endif %}
                                                 </div>
                                             </div>
                                         </article>

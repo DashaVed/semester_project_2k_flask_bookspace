@@ -1,0 +1,64 @@
+h5 {
+    font-family: montserrat, sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    color: #28231D;
+    font-size: 24px;
+    padding-bottom: 10px;
+}
+
+.order-content {
+    margin-left: 100px;
+    width: 800px;
+}
+
+.order-item {
+    border: 1px solid #DCDCDC;
+    border-radius: 3px;
+}
+
+.order-header {
+    width: 800px;
+    height: 80px;
+    background-color: #F4FEC1;
+    font-family: montserrat, sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    color: #28231D;
+}
+
+.order-status {
+    padding-top: 0.5px;
+    width: 100px;
+    background-color: white;
+    border-radius: 6px;
+    font-family: montserrat, sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    color: #28231D;
+    text-align: center;
+}
+
+.header-price {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.order-header-first {
+    width: 300px;
+}
+
+.order-header-second {
+    width: 500px;
+}
+
+.order-info_content {
+    grid-template-columns: 192px 1fr;
+}
+
+.order-info {
+    font-family: montserrat, sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    color: #28231D;
+}
