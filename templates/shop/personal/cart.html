@@ -19,15 +19,35 @@
                         {% for product in products %}
                             <div class="cart-product_item pt-3">
                                 <div class="cart-product-btn d-flex justify-content-end me-4">
-                                    <div class="cart-product-wishes me-3">
-                                        <span><i class='bx bx-heart mt-1'></i></span>
-                                    </div>
-                                    <form method="post"
-                                          action="{{ url_for('delete_item', product_id=product.product_id) }}">
-                                        <div class="cart-product-delete">
-                                            <button class="btn delete-btn p-0">Удалить</button>
+                                    {% if is_authenticated %}
+                                    <form action="{{ url_for('add_to_wishlist', product_id=product.product_id) }}"
+                                          method="post">
+                                        <div class="cart-product-wishes me-3">
+                                            <button type="submit"
+                                                    class="product-card__add-favorites justify-content-end">
+                                                <i class='bx bx-heart mt-1'></i>
+                                            </button>
                                         </div>
                                     </form>
+                                    {% else %}
+                                    <button type="button" class="product-card__add-favorites justify-content-end">
+                                        <i class='bx bx-heart mt-1'></i></button>
+                                    {% endif %}
+                                    {% if is_authenticated %}
+                                        <form method="post"
+                                              action="{{ url_for('delete_item', cart_id=cart_id, product_id=product.product_id) }}">
+                                            <div class="cart-product-delete">
+                                                <button class="btn delete-btn p-0">Удалить</button>
+                                            </div>
+                                        </form>
+                                    {% else %}
+                                        <form method="post"
+                                              action="{{ url_for('delete_item', product_id=product.product_id) }}">
+                                            <div class="cart-product-delete">
+                                                <button class="btn delete-btn p-0">Удалить</button>
+                                            </div>
+                                        </form>
+                                    {% endif %}
                                 </div>
                             </div>
                             <article class="cart-product d-inline-flex">

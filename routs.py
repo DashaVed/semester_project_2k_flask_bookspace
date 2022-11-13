@@ -124,10 +124,10 @@ def add_to_cart(product_id):
     return redirect(request.referrer)
 
 
-@app.route('/delete-item/<int:product_id>', methods=['POST'])
-def delete_item(product_id):
+@app.route('/delete-item/<int:cart_id>/<int:product_id>', methods=['POST'])
+def delete_item(product_id, cart_id=None):
     if is_authenticated():
-        db.delete('cart_item', 'product_id', values=(product_id,))
+        db.delete('DELETE FROM cart_item WHERE cart_id = %s AND product_id= %s', values=(cart_id, product_id,))
     else:
         cart = session["cart"]
         for value in cart:
@@ -204,16 +204,29 @@ def make_order():
             flash('Заказ успешно сформирован и оплачен')
             order_line(order_id)
             if is_auth:
-                db.delete('cart_item')
+                db.delete('DELETE FROM cart_item WHERE cart_id = %s', values=(db_cart, ))
             else:
                 clear_cart()
-    return render_template('shop/personal/order_form.html', total_amount=total_amount, total_count=total_count, user=user,
-                           is_authenticated=is_auth)
+    return render_template('shop/personal/order_form.html', total_amount=total_amount, total_count=total_count,
+                           user=user, is_authenticated=is_auth)
 
 
 @app.route('/personal/wishlist', methods=['GET', 'POST'])
 def wishlist():
-    ...
+    is_auth = is_authenticated()
+    if is_auth:
+        user = db.select('SELECT * FROM account WHERE user_id = %s', values=(session['id'],))[0]
+        products = []
+        user_wishlist = db.select('SELECT wishlist_id FROM wishlist WHERE user_id = %s', values=(session['id'],))[0]
+        products_id = db.select('SELECT product_id FROM wishlist_item WHERE wishlist_id = %s',
+                                values=(user_wishlist['wishlist_id'],))
+        for item in products_id:
+            print(item)
+            products += \
+                db.select('SELECT product_id, title, author, series, price, image FROM product WHERE product_id = %s',
+                          values=(item['product_id'],))
+        return render_template('shop/personal/wishlist.html', user=user, products=products,
+                               wishlist_id=user_wishlist['wishlist_id'])
 
 
 @app.route('/add-to-wishlist/<int:product_id>', methods=['POST'])
@@ -231,8 +244,14 @@ def add_to_wishlist(product_id):
 
     if not item_exist:
         db.insert('INSERT INTO wishlist_item(wishlist_id, product_id) VALUES (%s, %s)',
-                  values=(user_wishlist['wishlist_id'], product_id, ))
+                  values=(user_wishlist['wishlist_id'], product_id,))
         return redirect(request.referrer)
+
+
+@app.route('/delete-wishlist/<int:wishlist_id>/<int:product_id>', methods=['POST'])
+def delete_wishlist(wishlist_id, product_id):
+    db.delete('DELETE FROM wishlist_item WHERE wishlist_id=%s AND product_id=%s', values=(wishlist_id, product_id, ))
+    return redirect(request.referrer)
 
 
 def get_product(products, cart):
@@ -271,8 +290,8 @@ def get_cart():
                 db.insert('INSERT INTO cart_item (cart_id, product_id, qty) VALUES (%s, %s, %s)',
                           values=(db_cart['cart_id'], item['product_id'], item['qty']))
             clear_cart()
-    return render_template('shop/personal/cart.html', products=products, total_count=total_count, total_amount=total_amount,
-                           is_authenticated=is_auth)
+    return render_template('shop/personal/cart.html', products=products, total_count=total_count,
+                           cart_id=db_cart['cart_id'] or None, total_amount=total_amount, is_authenticated=is_auth)
 
 
 @app.route('/registration', methods=['GET', 'POST'])

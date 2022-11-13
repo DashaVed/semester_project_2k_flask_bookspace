@@ -1,0 +1,92 @@
+h5 {
+    font-family: montserrat, sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    color: #28231D;
+    font-size: 24px;
+    padding-bottom: 10px;
+}
+
+.wishlist-content {
+    margin-left: 100px;
+}
+
+.wishlist-product-image {
+    width: 170px;
+    height: 170px;
+    text-align: center;
+}
+
+.wishlist-product-image img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.wishlist-product-data {
+    width: 430px;
+    font-family: montserrat, sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    color: #28231D;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.wishlist-product-title-link {
+    font-family: montserrat, sans-serif;
+    font-weight: 500;
+    color: #28231D;
+    font-size: 16px;
+    text-decoration: none;
+}
+
+.wishlist-product-title-link:hover {
+    color: #FF9F1C;
+}
+
+.add-to-cart-btn {
+    width: 140px;
+    font-family: montserrat, sans-serif;
+    font-weight: 300;
+    color: #28231D;
+    font-size: 16px;
+    border: 1px solid #DCDCDC;
+    border-radius: 3px;
+}
+
+.wishlist-product-actions {
+    width: 150px;
+}
+
+.wishlist-product-price {
+    text-align: center;
+    font-family: montserrat, sans-serif;
+    font-weight: 700;
+    color: #28231D;
+    font-size: 16px;
+}
+
+.wishlist-product-delete {
+    text-align: center;
+}
+
+.delete-btn {
+    height: 24px;
+    font-family: montserrat, sans-serif;
+    font-weight: 500;
+    color: #28231D;
+    font-size: 14px;
+}
+
+.delete-btn:hover {
+    text-decoration: underline;
+}
+
+.delete-btn:focus {
+    border: none;
+    text-decoration: underline;
+}
+
+.wishlist-line {
+    border-bottom: 1px solid #DCDCDC;
+}

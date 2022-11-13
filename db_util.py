@@ -31,11 +31,7 @@ class Database:
         self.cur.execute(query, values)
         self.con.commit()
 
-    def delete(self, table, column=None, values=()):
-        if column:
-            query = f'DELETE FROM {table} WHERE {column} = %s'
-        else:
-            query = f'DELETE FROM {table}'
+    def delete(self, query, values):
         self.cur.execute(query, values)
         self.con.commit
 

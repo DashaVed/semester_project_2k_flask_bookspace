@@ -93,6 +93,14 @@ h1 {
     -webkit-appearance: none;
 }
 
+.product-card__add-favorites{
+    border: none;
+    outline: none;
+    height: 26px;
+    background-color: #ffffff;
+    text-align: right;
+}
+
 .cart-product-delete {
     text-align: center;
 }
