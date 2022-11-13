@@ -34,6 +34,14 @@ class Database:
         self.cur.execute(query, values)
         self.con.commit()
 
+    def delete(self, table, column=None, values=()):
+        if column:
+            query = f'DELETE FROM {table} WHERE {column} = %s'
+        else:
+            query = f'DELETE FROM {table}'
+        self.cur.execute(query, values)
+        self.con.commit
+
     def prepare_data(self, data):
         prepare_data = []
         if len(data):

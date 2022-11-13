@@ -10,7 +10,6 @@
     <div class="cart">
         <div class="container-fluid">
             <div class="row">
-            {{ session }}
                 <div class="cart-title pt-3 pb-3">
                     <h1>Корзина</h1>
                 </div>
@@ -62,7 +61,7 @@
                                         <form action="{{ url_for('change_quantity', product_id=product.product_id) }}"
                                               method="post">
                                             <input type="number" class="count-value" name="quantity"
-                                                   value="{{ product.count }}" min="1" max="{{ product.quantity }}">
+                                                   value="{{ product.qty }}" min="1" max="{{ product.quantity }}">
                                             <input type="submit" hidden name="check"/>
                                         </form>
                                         <form action="{{ url_for('change_quantity', product_id=product.product_id) }}"
