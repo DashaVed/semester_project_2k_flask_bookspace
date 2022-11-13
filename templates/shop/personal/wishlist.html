@@ -1,0 +1,49 @@
+{% extends 'shop/personal/personal.html' %}
+
+{% block title %}Отложенные товары{% endblock %}
+
+{% block profile_style %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for( 'static', filename='css/wishlist.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="wishlist-content">
+        <p>Код {{ wishlist_id }}</p>
+        <h5>Отложенные товары ({{ products|length }})</h5>
+        {% for product in products %}
+            <article class="wishlist-product d-inline-flex pt-3">
+                <div class="wishlist-product-image"
+                     onclick="location.href =
+                             '{{ url_for("get_book", book_id=product['product_id']) }}'">
+                    <img src="{{ url_for( 'static', filename='img/' + product.image) }}"
+                         alt="{{ product.title }}">
+                </div>
+                <div class="wishlist-product-info ms-4 me-4 mt-1 d-flex">
+                    <div class="wishlist-product-data d-flex flex-column">
+                        <span class="mb-2"><a class="wishlist-product-title-link"
+                                              href="{{ url_for("get_book", book_id=product['product_id']) }}">
+                            {{ product.title }}</a></span>
+                        <span>Автор: {{ product.author }}</span>
+                        <span>Серия: {{ product.series }}</span>
+                        <form action="{{ url_for('add_to_cart', product_id=product.product_id) }}" method="post">
+                            <input type="hidden" name="quantity" value="1" min="1" max="{{ product.quantity }}">
+                            <button type="submit" class="btn add-to-cart-btn mt-3">В корзину</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="wishlist-product-actions d-flex flex-column mt-1 justify-content-between">
+                    <div class="wishlist-product-price">
+                        <span>{{ product.price| int }} p.</span>
+                    </div>
+                    <form method="post"
+                          action="{{ url_for('delete_wishlist', wishlist_id=wishlist_id, product_id=product.product_id) }}">
+                        <div class="wishlist-product-delete">
+                            <button class="btn delete-btn p-0">Удалить</button>
+                        </div>
+                    </form>
+                </div>
+            </article>
+            <div class="wishlist-line pt-3"></div>
+        {% endfor %}
+    </div>
+{% endblock %}
