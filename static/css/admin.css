@@ -1,0 +1,90 @@
+h1 {
+    margin-right: 10px;
+    color: #FF9F1C;
+    text-decoration: none;
+    font-size: 40px;
+    font-weight: 700;
+    vertical-align: middle;
+}
+
+h1 span {
+    font-family: montserrat, sans-serif;
+    font-weight: 500;
+    color: #28231D;
+    font-size: 24px;
+}
+
+.navbar-add-product-btn{
+    border: 2px solid #28231D;
+    border-radius: 3px;
+    background-color: white;
+}
+
+.navbar-add-product-btn a {
+    font-family: montserrat, sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    color: #28231D;
+    font-size: 16px;
+    text-decoration: none;
+}
+
+.product-card {
+    width: 290px;
+    height: 400px;
+}
+
+.product-card-image {
+    width: 284px;
+    height: 220px;
+    justify-content: center;
+    align-items: center;
+}
+
+.product-card-image img {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    margin: 0 auto;
+}
+
+.product-card-content {
+    padding-left: 36px;
+}
+
+.product-card-price {
+    font-family: montserrat, sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    color: #28231D;
+    font-size: 16px;
+}
+
+.product-card-title {
+    font-family: montserrat, sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    color: #28231D;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.product-card-author {
+    font-family: montserrat, sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    color: #28231D;
+    font-size: 12px;
+}
+
+.product-card-actions {
+    font-family: montserrat, sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    font-size: 14px;
+
+}
+
+.product-card-actions a {
+    color: #28231D;
+}

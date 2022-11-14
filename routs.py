@@ -44,16 +44,16 @@ def is_authenticated():
 def is_admin():
     if is_authenticated():
         return True if session['id'] == '4' else False
+    return False
 
 
-@app.route("/")
-def main():
-    return render_template('shop/main.html', is_authenticated=is_authenticated(), is_admin=is_admin())
+# def main():
+#     return render_template('shop/main.html', is_authenticated=is_authenticated(), is_admin=is_admin())
 
-
+@app.route("/", defaults={'parent_id': None})
 @app.route('/catalog', defaults={'parent_id': None})
 @app.route('/catalog/<parent_id>')
-def get_catalog(parent_id):
+def main(parent_id):
     if parent_id:
         products = []
         products_id = db.select('SELECT product_id FROM product_category WHERE category_id=%s', (parent_id,))
@@ -352,8 +352,8 @@ def registration():
             flash('Аккаунт с таким номером телефона уже существует')
         elif validation_account_form(first_name, last_name, phone, email, password):
             user_id = db.get_insert('INSERT INTO account (first_name, last_name, phone, email, password)'
-                      ' VALUES (%s, %s, %s, %s, %s) RETURNING user_id',
-                      values=(first_name, last_name, phone, email, _hashed_password))
+                                    ' VALUES (%s, %s, %s, %s, %s) RETURNING user_id',
+                                    values=(first_name, last_name, phone, email, _hashed_password))
             db.insert('INSERT INTO cart(user_id) VALUES (%s)', values=(user_id,))
             db.insert('INSERT INTO wishlist(user_id) VALUES (%s)', values=(user_id,))
             session['loggedin'] = True
@@ -388,6 +388,12 @@ def logout():
     session.pop('id', None)
     session.pop('email', None)
     return redirect(url_for('main'))
+
+
+@app.route('/admin')
+def admin():
+    products = db.select('SELECT * FROM product')
+    return render_template('shop/admin/main_admin.html', products=products, is_admin=is_admin())
 
 
 @app.route('/admin/add-product', methods=['GET', 'POST'])

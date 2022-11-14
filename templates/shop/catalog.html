@@ -22,7 +22,7 @@
                                     <ul class="catalog-nav_list">
                                         {% for category in categories %}
                                             <li class="catalog-nav_item pb-1">
-                                                <a href="{{ url_for('get_catalog', parent_id=category.id) }}"
+                                                <a href="{{ url_for('main', parent_id=category.id) }}"
                                                    class="catalog-nav_link ">{{ category.value }}</a>
                                             </li>
                                         {% endfor %}

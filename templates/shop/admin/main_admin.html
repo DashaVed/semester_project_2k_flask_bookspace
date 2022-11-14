@@ -1,0 +1,45 @@
+{% extends 'shop/admin/base.html' %}
+
+{% block title %}Административная панель{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for( 'static', filename='css/admin.css') }}">
+{% endblock %}
+
+{% block content %}
+    <nav class="navbar navbar-expand-lg m-4 mb-5">
+        <div class="container-fluid">
+            <h1 class="navbar-logo">Bookspace<span>.admin</span></h1>
+            <button type="button" class="navbar-add-product-btn me-5">
+                <a href="{{ url_for('add_product') }}">Добавить товар</a>
+            </button>
+        </div>
+    </nav>
+    <div class="content m-4">
+        <div class="product-list d-flex fill-height flex-wrap">
+            {% for product in products %}
+                <div class="product-list-item">
+                    <article class="product-card">
+                        <div class="product-card-image">
+                            <img src="{{ url_for( 'static', filename='img/' + product.image) }}"
+                                 alt="{{ product.title }}">
+                        </div>
+                        <div class="product-card-content pt-2">
+                            <div class="product-card-price">
+                                <span>{{ product.price| int }} p.</span>
+                            </div>
+                            <span class="product-card-title">{{ product.title }}</span>
+                            <div class="product-card-author">
+                                <span>{{ product.author }}</span>
+                            </div>
+                            <div class="product-card-actions d-flex mt-3 me-5 justify-content-between">
+                                <a href="#">Редактировать</a>
+                                <a href="#">Удалить</a>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
