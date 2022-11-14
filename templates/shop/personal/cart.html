@@ -20,20 +20,15 @@
                             <div class="cart-product_item pt-3">
                                 <div class="cart-product-btn d-flex justify-content-end me-4">
                                     {% if is_authenticated %}
-                                    <form action="{{ url_for('add_to_wishlist', product_id=product.product_id) }}"
-                                          method="post">
-                                        <div class="cart-product-wishes me-3">
-                                            <button type="submit"
-                                                    class="product-card__add-favorites justify-content-end">
-                                                <i class='bx bx-heart mt-1'></i>
-                                            </button>
-                                        </div>
-                                    </form>
-                                    {% else %}
-                                    <button type="button" class="product-card__add-favorites justify-content-end">
-                                        <i class='bx bx-heart mt-1'></i></button>
-                                    {% endif %}
-                                    {% if is_authenticated %}
+                                        <form action="{{ url_for('add_to_wishlist', product_id=product.product_id) }}"
+                                              method="post">
+                                            <div class="cart-product-wishes me-3">
+                                                <button type="submit"
+                                                        class="product-card__add-favorites justify-content-end">
+                                                    <i class='bx bx-heart mt-1'></i>
+                                                </button>
+                                            </div>
+                                        </form>
                                         <form method="post"
                                               action="{{ url_for('delete_item', cart_id=cart_id, product_id=product.product_id) }}">
                                             <div class="cart-product-delete">
@@ -41,8 +36,10 @@
                                             </div>
                                         </form>
                                     {% else %}
+                                        <button type="button" class="product-card__add-favorites justify-content-end">
+                                            <i class='bx bx-heart mt-1'></i></button>
                                         <form method="post"
-                                              action="{{ url_for('delete_item', product_id=product.product_id) }}">
+                                              action="{{ url_for('delete_item', cart_id=cart_id, product_id=product.product_id) }}">
                                             <div class="cart-product-delete">
                                                 <button class="btn delete-btn p-0">Удалить</button>
                                             </div>
@@ -98,7 +95,7 @@
                     </div>
                     <div class="cart-sidebar me-4 mt-3">
                         <div class="cart-order-info p-3 mt-3">
-                            <span class="cart-order-text">Всего товаров: {{ total_count }}</span>
+                            <span class="cart-order-text">Всего товаров: {{ products|length }}</span>
                             <br>
                             <span class="cart-order-text">Общая стоимость:
                                     <span class="cart-order-price">{{ total_amount|int }} p.</span></span>

@@ -67,10 +67,11 @@
                             <li><a class="dropdown-item small" href="{{ url_for('logout') }}"><h6>Выйти</h6></a></li>
                         </ul>
                     </div>
+                    <a href="{{ url_for('wishlist') }}"><i class='bx bx-heart'></i></a>
                 {% else %}
                     <a href="{{ url_for('login') }}"><i class='bx bx-user-circle'></i></a>
+                    <a href="{{ url_for('login') }}"><i class='bx bx-heart'></i></a>
                 {% endif %}
-                <a href="{{ url_for('wishlist') }}"><i class='bx bx-heart'></i></a>
                 <a href="{{ url_for('get_cart') }}"><i class='bx bx-shopping-bag'></i></a>
 
             </div>

@@ -8,7 +8,6 @@
 
 {% block body %}
     <div class="wishlist-content">
-        <p>Код {{ wishlist_id }}</p>
         <h5>Отложенные товары ({{ products|length }})</h5>
         {% for product in products %}
             <article class="wishlist-product d-inline-flex pt-3">
