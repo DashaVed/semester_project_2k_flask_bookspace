@@ -113,8 +113,19 @@ def profile():
         return render_template('shop/personal/profile.html', is_authenticated=is_auth, user=user, form=form)
 
 
-@app.route('/edit-profile/<int:user_id>', methods=['POST'])
+@app.route('/edit-profile', methods=['POST'])
 def edit_profile():
+    first_name = request.form.get('first_name')
+    last_name = request.form.get('last_name')
+    phone = request.form.get('phone')
+    email = request.form.get('email')
+    password = request.form.get('password')
+    _hashed_password = generate_password_hash(password)
+
+    if validation_account_form(first_name, last_name, phone, email, password):
+        db.update('UPDATE account SET first_name = %s, last_name = %s, phone = %s, email = %s, password = %s '
+                  'WHERE user_id = %s', values=(first_name, last_name, phone, email, _hashed_password, session['id']))
+    return redirect(request.referrer)
 
 
 @app.route('/personal/order')
@@ -311,10 +322,7 @@ def delete_item(cart_id, product_id):
 
 
 def validation_account_form(first_name, last_name, phone, email, password):
-    phones = db.select('SELECT phone FROM account WHERE phone= %s', values=(phone,))
-    if phones:
-        flash('Аккаунт с таким номером телефона уже существует')
-    elif not re.match(r'^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$', phone):
+    if not re.match(r'^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$', phone):
         flash('Введите корректный номер телефона')
     elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
         flash('Введите корректный email')
@@ -336,29 +344,22 @@ def registration():
 
         _hashed_password = generate_password_hash(password)
 
-        user = db.select('SELECT * FROM account WHERE email= %s', values=(email,))[0]
+        user = db.select('SELECT * FROM account WHERE email= %s', values=(email,))
         phones = db.select('SELECT phone FROM account WHERE phone= %s', values=(phone,))
         if user:
             flash('Аккаунт с таким email уже существует')
         elif phones:
             flash('Аккаунт с таким номером телефона уже существует')
-        elif not re.match(r'^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$', phone):
-            flash('Введите корректный номер телефона')
-        elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
-            flash('Введите корректный email')
-        elif not first_name or not last_name or not password:
-            flash('Заполните все поля')
-        else:
-            db.insert('INSERT INTO account (first_name, last_name, phone, email, password)'
-                      ' VALUES (%s, %s, %s, %s, %s)',
+        elif validation_account_form(first_name, last_name, phone, email, password):
+            user_id = db.get_insert('INSERT INTO account (first_name, last_name, phone, email, password)'
+                      ' VALUES (%s, %s, %s, %s, %s) RETURNING user_id',
                       values=(first_name, last_name, phone, email, _hashed_password))
-            db.insert('INSERT INTO cart(user_id) VALUES (%s)', values=(user['user_id'],))
-            db.insert('INSERT INTO wishlist(user_id) VALUES (%s)', values=(user['user_id'],))
-            user = db.select('SELECT * FROM account WHERE email= %s', values=(email,))[0]
+            db.insert('INSERT INTO cart(user_id) VALUES (%s)', values=(user_id,))
+            db.insert('INSERT INTO wishlist(user_id) VALUES (%s)', values=(user_id,))
             session['loggedin'] = True
-            session['id'] = user['user_id']
-            session['email'] = user['email']
-            return redirect(request.referrer)
+            session['id'] = user_id
+            session['email'] = email
+            return redirect(url_for('main'))
 
     return render_template('shop/auth/registration.html')
 
@@ -377,9 +378,7 @@ def login():
                 session['id'] = user['user_id']
                 session['email'] = user['email']
                 return redirect(url_for('main'))
-
         flash('Неправильный логин или пароль. Попробуйте еще раз.')
-        return redirect(request.referrer)
     return render_template('shop/auth/authorization.html')
 
 
