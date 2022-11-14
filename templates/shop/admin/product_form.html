@@ -9,19 +9,28 @@
                 <div class="row d-flex justify-content-center align-items-center mt-4">
                     <div class="col-12 col-md-9 col-lg-7 col-xl-5">
                         <h2 class="text-center pb-4">Добавление товара</h2>
+                        {% with messages = get_flashed_messages() %}
+                            {% if messages %}
+                                {% for message in messages %}
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        {{ message }}
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
                         {% from "_formhelpers.html" import render_field %}
                         <form method="post" enctype="multipart/form-data">
                             {{ render_field(form.title, class="form-control") }}
                             {{ render_field(form.author, class="form-control") }}
                             {{ render_field(form.description, class="form-control", rows=5) }}
-                            <label for="category">Категория</label>
+                            <label for="category"><b>Категория</b></label>
                             <select name="category" class="form-control" required>
                                 <option>Выбрать категорию</option>
                                 {% for category in categories %}
                                     <option value="{{ category.id }}">{{ category.value }}</option>
                                 {% endfor %}
                             </select>
-                            <label for="label">Ярлык</label>
+                            <label for="label"><b>Ярлык</b></label>
                             <select name="label" class="form-control pt-2">
                                 <option value="none">Выбрать ярлык</option>
                                 {% for label in labels %}
@@ -33,16 +42,9 @@
                             {{ render_field(form.price, class="form-control") }}
                             {{ render_field(form.quantity, class="form-control") }}
                             {{ render_field(form.image, class="form-control") }}
-                            {% with messages = get_flashed_messages() %}
-                                {% if messages %}
-                                    {% for message in messages %}
-                                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                            {{ message }}
-                                        </div>
-                                    {% endfor %}
-                                {% endif %}
-                            {% endwith %}
-                            <input class="btn btn-warning" type=submit value=Добавить>
+                            <div class="d-grid gap-2 col-6 mx-auto mt-4">
+                                <input class="btn btn-warning" type=submit value=Добавить>
+                            </div>
                         </form>
                     </div>
                 </div>
