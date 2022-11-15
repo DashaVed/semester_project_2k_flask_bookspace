@@ -1,0 +1,42 @@
+{% extends "shop/layout.html" %}
+
+{% block title %}Страница не найдена{% endblock %}
+
+{% block style %}
+    <style>
+        .title-return {
+            font-family: montserrat, sans-serif;
+            font-weight: 500;
+            font-size: 14px;
+            color: #28231D;
+        }
+
+        .title-return:hover {
+            color: #FF9F1C;
+        }
+
+        .title span {
+            font-family: montserrat, sans-serif;
+            font-weight: 500;
+            font-size: 32px;
+            color: #28231D;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="error">
+        <div class="container-fluid">
+            <div class="row d-flex justify-content-center align-items-center mt-4">
+                <div class="col-12 col-md-9">
+                    <div class="title d-flex flex-column">
+                        <a href="{{ url_for('main') }}" class="title-return mb-4">< На главную страницу</a>
+                        <span style="text-align: center;">Запрашиваемая страница не найдена</span>
+                    </div>
+                    <img src="/static/img/404.png" alt="404" style="max-height: 100%; max-width: 100%;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

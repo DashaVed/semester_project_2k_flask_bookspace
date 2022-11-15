@@ -100,8 +100,10 @@ def change_quantity(product_id):
 
 @app.route('/product/<book_id>')
 def get_book(book_id):
-    book = db.select('SELECT * FROM product WHERE product_id = %s', (book_id,))[0]
-    return render_template('shop/book.html', book=book, is_authenticated=is_authenticated())
+    book = db.select('SELECT * FROM product WHERE product_id = %s', (book_id,))
+    if book:
+        return render_template('shop/book.html', book=book[0], is_authenticated=is_authenticated())
+    return render_template('shop/error.html')
 
 
 @app.route('/personal/profile', methods=['GET', 'POST'])
@@ -121,8 +123,8 @@ def edit_profile():
     first_name = request.form.get('first_name')
     last_name = request.form.get('last_name')
     phone = request.form.get('phone')
-    email = request.form.get('email')
     password = request.form.get('password')
+    email = request.form.get('email')
     _hashed_password = generate_password_hash(password)
 
     if validation_account_form(first_name, last_name, phone, email, password):
@@ -435,14 +437,14 @@ def edit_product(product_id=None):
             description = form.description.data
             image = photos.save(request.files.get('image'), name=secrets.token_hex(10) + '.')
             db.insert(
-                'INSERT INTO product (title, author, description, publishing_office, series, quantity, price, image, category_id, label_id)'
-                ' VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
+                'INSERT INTO product (title, author, description, publishing_office, series, quantity, price, image, '
+                'category_id, label_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
                 values=(
                     title, author, description, publishing_office, series, quantity, price, image, category_id,
                     label_id))
             flash('Товар успешно добавлен')
-    return render_template('shop/admin/product_form.html', form=form, categories=categories, labels=labels, header=header,
-                           product=product)
+    return render_template('shop/admin/product_form.html', form=form, categories=categories, labels=labels,
+                           header=header, product=product)
 
 
 @app.route('/admin/delete-product/<int:product_id>', methods=['GET'])
@@ -462,8 +464,8 @@ def about_us():
 
 
 @app.errorhandler(404)
-def page_not_found(e):
-    return render_template('error.html'), 404
+def page_not_found():
+    return render_template('shop/error.html'), 404
 
 
 if __name__ == '__main__':
