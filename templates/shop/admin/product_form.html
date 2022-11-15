@@ -1,6 +1,6 @@
 {% extends "shop/admin/base.html" %}
 
-{% block title %}Добавление товара{% endblock %}
+{% block title %}{{ header }}{% endblock %}
 
 {% block content %}
     <section class="add_product">
@@ -8,7 +8,11 @@
             <div class="container">
                 <div class="row d-flex justify-content-center align-items-center mt-4">
                     <div class="col-12 col-md-9 col-lg-7 col-xl-5">
-                        <h2 class="text-center pb-4">Добавление товара</h2>
+                        <div class="mb-3">
+                            <a href="{{ url_for('admin') }}" style="text-decoration: none; color: #FFBA00;">
+                                < Вернуться обратно</a>
+                        </div>
+                        <h2 class="text-center pb-4">{{ header }}</h2>
                         {% with messages = get_flashed_messages() %}
                             {% if messages %}
                                 {% for message in messages %}
@@ -18,34 +22,63 @@
                                 {% endfor %}
                             {% endif %}
                         {% endwith %}
-                        {% from "_formhelpers.html" import render_field %}
-                        <form method="post" enctype="multipart/form-data">
-                            {{ render_field(form.title, class="form-control") }}
-                            {{ render_field(form.author, class="form-control") }}
-                            {{ render_field(form.description, class="form-control", rows=5) }}
-                            <label for="category"><b>Категория</b></label>
-                            <select name="category" class="form-control" required>
-                                <option>Выбрать категорию</option>
-                                {% for category in categories %}
-                                    <option value="{{ category.id }}">{{ category.value }}</option>
-                                {% endfor %}
-                            </select>
-                            <label for="label"><b>Ярлык</b></label>
-                            <select name="label" class="form-control pt-2">
-                                <option value="none">Выбрать ярлык</option>
-                                {% for label in labels %}
-                                    <option value="{{ label.id }}">{{ label.value }}</option>
-                                {% endfor %}
-                            </select>
-                            {{ render_field(form.publishing_office, class="form-control") }}
-                            {{ render_field(form.series, class="form-control") }}
-                            {{ render_field(form.price, class="form-control") }}
-                            {{ render_field(form.quantity, class="form-control") }}
-                            {{ render_field(form.image, class="form-control") }}
-                            <div class="d-grid gap-2 col-6 mx-auto mt-4">
-                                <input class="btn btn-warning" type=submit value=Добавить>
-                            </div>
-                        </form>
+                        {% if product %}
+                            {% from "_formhelpers.html" import render_field %}
+                            <form method="post" enctype="multipart/form-data">
+                                {{ render_field(form.title, class="form-control", value=product.title) }}
+                                {{ render_field(form.author, class="form-control", value=product.author) }}
+                                <label for="category"><b>Категория</b></label>
+                                <select name="category" class="form-control" required>
+                                    <option>Выбрать категорию</option>
+                                    {% for category in categories %}
+                                        <option value="{{ category.id }}">{{ category.value }}</option>
+                                    {% endfor %}
+                                </select>
+                                <label for="label"><b>Ярлык</b></label>
+                                <select name="label" class="form-control pt-2">
+                                    <option value="NULL">Выбрать ярлык</option>
+                                    {% for label in labels %}
+                                        <option value="{{ label.id }}">{{ label.value }}</option>
+                                    {% endfor %}
+                                </select>
+                                {{ render_field(form.publishing_office, class="form-control", value=product.publishing_office) }}
+                                {{ render_field(form.series, class="form-control", value=product.series) }}
+                                {{ render_field(form.price, class="form-control", value=product.price|int) }}
+                                {{ render_field(form.quantity, class="form-control", value=product.quantity) }}
+                                <div class="d-grid gap-2 col-6 mx-auto mt-4">
+                                    <input class="btn btn-warning" type=submit value='Редактировать'>
+                                </div>
+                            </form>
+                        {% else %}
+                            {% from "_formhelpers.html" import render_field %}
+                            <form method="post" enctype="multipart/form-data">
+                                {{ render_field(form.title, class="form-control") }}
+                                {{ render_field(form.author, class="form-control") }}
+                                {{ render_field(form.description, class="form-control", rows=5) }}
+                                <label for="category"><b>Категория</b></label>
+                                <select name="category" class="form-control" required>
+                                    <option>Выбрать категорию</option>
+                                    {% for category in categories %}
+                                        <option value="{{ category.id }}">{{ category.value }}</option>
+                                    {% endfor %}
+                                </select>
+                                <label for="label"><b>Ярлык</b></label>
+                                <select name="label" class="form-control pt-2">
+                                    <option value="NULL">Выбрать ярлык</option>
+                                    {% for label in labels %}
+                                        <option value="{{ label.id }}">{{ label.value }}</option>
+                                    {% endfor %}
+                                </select>
+                                {{ render_field(form.publishing_office, class="form-control") }}
+                                {{ render_field(form.series, class="form-control") }}
+                                {{ render_field(form.price, class="form-control") }}
+                                {{ render_field(form.quantity, class="form-control") }}
+                                {{ render_field(form.image, class="form-control") }}
+                                <div class="d-grid gap-2 col-6 mx-auto mt-4">
+                                    <input class="btn btn-warning" type=submit value='Добавить'>
+                                </div>
+                            </form>
+                        {% endif %}
                     </div>
                 </div>
             </div>

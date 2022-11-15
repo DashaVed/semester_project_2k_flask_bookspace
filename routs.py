@@ -56,12 +56,14 @@ def is_admin():
 def main(parent_id):
     if parent_id:
         products = []
-        products_id = db.select('SELECT product_id FROM product_category WHERE category_id=%s', (parent_id,))
-        for product_id in products_id:
-            products += \
-                db.select('SELECT product_id, title, author, price, image FROM product WHERE product_id = %s',
-                          values=(product_id['product_id'],))
         categories = db.select(f'SELECT * FROM category WHERE category_parent_id= %s', (parent_id,))
+        categories += [{'id': parent_id}]
+        for category in categories:
+            products_id = db.select('SELECT product_id FROM product WHERE category_id = %s', (str(category['id']),))
+            for product_id in products_id:
+                products += \
+                    db.select('SELECT product_id, title, author, price, image FROM product WHERE product_id = %s',
+                              values=(product_id['product_id'],))
     else:
         categories = db.select('SELECT * FROM category WHERE category_parent_id is NULL')
         products = db.select('SELECT * FROM product')
@@ -111,6 +113,7 @@ def profile():
         if request.method == 'POST':
             pass
         return render_template('shop/personal/profile.html', is_authenticated=is_auth, user=user, form=form)
+    return render_template('shop/auth/authorization.html')
 
 
 @app.route('/edit-profile', methods=['POST'])
@@ -135,6 +138,7 @@ def order():
         user = db.select('SELECT * FROM account WHERE user_id = %s', values=(session['id'],))[0]
         orders = db.select('SELECT * FROM shop_order WHERE user_id = %s', values=(session['id'],))
         return render_template('shop/personal/order.html', is_authenticated=is_auth, user=user, orders=orders)
+    return render_template('shop/auth/authorization.html')
 
 
 def order_line(order_id):
@@ -176,7 +180,7 @@ def make_order():
             flash('Заказ успешно сформирован и оплачен')
             order_line(order_id)
             if is_auth:
-                db.delete('DELETE FROM cart_item WHERE cart_id = %s', values=(db_cart,))
+                db.delete('DELETE FROM cart_item WHERE cart_id = %s', values=(db_cart['cart_id'],))
             else:
                 clear_cart()
     return render_template('shop/personal/order_form.html', total_amount=total_amount, total_count=total_count,
@@ -198,6 +202,7 @@ def wishlist():
                           values=(item['product_id'],))
         return render_template('shop/personal/wishlist.html', user=user, products=products,
                                wishlist_id=user_wishlist['wishlist_id'], is_authenticated=is_auth)
+    return render_template('shop/auth/authorization.html')
 
 
 @app.route('/add-to-wishlist/<int:product_id>', methods=['POST'])
@@ -393,36 +398,57 @@ def logout():
 @app.route('/admin')
 def admin():
     products = db.select('SELECT * FROM product')
-    return render_template('shop/admin/main_admin.html', products=products, is_admin=is_admin())
+    return render_template('shop/admin/main_admin.html', products=products)
 
 
-@app.route('/admin/add-product', methods=['GET', 'POST'])
-def add_product():
+@app.route('/admin/product-form', defaults={'product_id': None}, methods=['GET', 'POST'])
+@app.route('/admin/product-form/<int:product_id>', methods=['GET', 'POST'])
+def edit_product(product_id=None):
+    if product_id:
+        header = 'Редактирование товара'
+        product = db.select('SELECT * FROM product WHERE product_id = %s', values=(product_id,))[0]
+        print(product)
+    else:
+        header = 'Добавление товара'
+        product = None
+
     categories = db.select('SELECT id, value FROM category')
     labels = db.select('SELECT id, value FROM shop_label')
     form = AddProduct(request.form)
     if request.method == 'POST':
         title = form.title.data
         author = form.author.data
-        description = form.description.data
         publishing_office = form.publishing_office.data
         series = form.series.data
         quantity = form.quantity.data
         price = form.price.data
-        image = photos.save(request.files.get('image'), name=secrets.token_hex(10) + '.')
-        product_id = db.get_insert(
-            'INSERT INTO product (title, author, description, publishing_office, series, quantity, price, image)'
-            ' VALUES (%s, %s, %s, %s, %s, %s, %s, %s) RETURNING product_id',
-            values=(title, author, description, publishing_office, series, quantity, price, image))
         category_id = request.form.get('category')
-        db.insert('INSERT INTO product_category (product_id, category_id) VALUES (%s, %s)',
-                  values=(product_id, category_id,))
         label_id = request.form.get('label')
-        if label_id != 'none':
-            db.insert('INSERT INTO product_label (product_id, label_id) VALUES (%s, %s)',
-                      values=(product_id, label_id,))
-        flash('Товар успешно добавлен')
-    return render_template('shop/admin/product_form.html', form=form, categories=categories, labels=labels)
+        if product_id:
+            db.update('UPDATE product SET title = %s, author = %s, publishing_office = %s,'
+                      'series = %s, quantity = %s, price = %s, category_id = %s, label_id = %s WHERE product_id = %s',
+                      values=(
+                          title, author, publishing_office, series, quantity, price, category_id, label_id,
+                          product_id,))
+            flash('Товар успешно изменен')
+        else:
+            description = form.description.data
+            image = photos.save(request.files.get('image'), name=secrets.token_hex(10) + '.')
+            db.insert(
+                'INSERT INTO product (title, author, description, publishing_office, series, quantity, price, image, category_id, label_id)'
+                ' VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
+                values=(
+                    title, author, description, publishing_office, series, quantity, price, image, category_id,
+                    label_id))
+            flash('Товар успешно добавлен')
+    return render_template('shop/admin/product_form.html', form=form, categories=categories, labels=labels, header=header,
+                           product=product)
+
+
+@app.route('/admin/delete-product/<int:product_id>', methods=['GET'])
+def delete_product(product_id):
+    db.delete('DELETE FROM product WHERE product_id = %s', values=(product_id,))
+    return redirect(request.referrer)
 
 
 @app.route('/delivery')
@@ -435,24 +461,9 @@ def about_us():
     return render_template('shop/about_us.html', is_authenticated=is_authenticated())
 
 
-@app.route('/sales')
-def get_sales():
-    return render_template('shop/sales.html', is_authenticated=is_authenticated())
-
-
-@app.route('/new')
-def get_new():
-    return render_template('shop/new.html', is_authenticated=is_authenticated())
-
-
-@app.route('/bestsellery')
-def get_bestsellery():
-    return render_template('shop/bestsellery.html', is_authenticated=is_authenticated())
-
-
-@app.route('/best-price')
-def get_best_price():
-    return render_template('shop/best_price.html', is_authenticated=is_authenticated())
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('error.html'), 404
 
 
 if __name__ == '__main__':
