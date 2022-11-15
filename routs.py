@@ -50,10 +50,12 @@ def is_admin():
 # def main():
 #     return render_template('shop/main.html', is_authenticated=is_authenticated(), is_admin=is_admin())
 
-@app.route("/", defaults={'parent_id': None})
-@app.route('/catalog', defaults={'parent_id': None})
-@app.route('/catalog/<parent_id>')
+@app.route("/", defaults={'parent_id': None}, methods=['GET', 'POST'])
+@app.route('/catalog', defaults={'parent_id': None}, methods=['GET', 'POST'])
+@app.route('/catalog/<parent_id>', methods=['GET', 'POST'])
 def main(parent_id):
+    search = request.args.get('search', None)
+    label = request.args.get('label', None)
     if parent_id:
         products = []
         categories = db.select(f'SELECT * FROM category WHERE category_parent_id= %s', (parent_id,))
@@ -62,13 +64,18 @@ def main(parent_id):
             products_id = db.select('SELECT product_id FROM product WHERE category_id = %s', (str(category['id']),))
             for product_id in products_id:
                 products += \
-                    db.select('SELECT product_id, title, author, price, image FROM product WHERE product_id = %s',
+                    db.select('SELECT product_id, title, author, price, image, label_id FROM product WHERE product_id = %s',
                               values=(product_id['product_id'],))
     else:
         categories = db.select('SELECT * FROM category WHERE category_parent_id is NULL')
         products = db.select('SELECT * FROM product')
+    if label:
+        products = list(filter(lambda x: x['label_id'] == label, products))
+    if search:
+        products = list(filter(lambda x: search.upper() in x['title'].upper(), products))
 
-    return render_template('shop/catalog.html', categories=categories, products=products,
+    labels = db.select('SELECT * FROM shop_label')
+    return render_template('shop/catalog.html', categories=categories, products=products, labels=labels,
                            is_authenticated=is_authenticated())
 
 
@@ -464,7 +471,7 @@ def about_us():
 
 
 @app.errorhandler(404)
-def page_not_found():
+def page_not_found(e):
     return render_template('shop/error.html'), 404
 
 

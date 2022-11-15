@@ -21,7 +21,7 @@ h1 {
     width: 200px;
 }
 
-.catalog-nav_title {
+.catalog-nav_title, .filter-title {
     font-family: montserrat, sans-serif;
     font-weight: 700;
     font-style: normal;
@@ -49,6 +49,28 @@ h1 {
     color: #FF9F1C;
 }
 
+.label-select {
+    width: 120px;
+}
+
+.label-select option {
+    font-family: montserrat, sans-serif;
+    font-weight: 500;
+    color: #28231D;
+    font-size: 14px;
+}
+
+.filter-btn {
+    vertical-align: middle;
+    width: 120px;
+    height: 20px;
+    font-family: montserrat, sans-serif;
+    font-weight: 500;
+    color: #28231D;
+    font-size: 14px;
+    border-color: #28231D;
+    border-radius: 1px;
+}
 
 .product-card {
     width: 240px;

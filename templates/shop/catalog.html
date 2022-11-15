@@ -27,7 +27,21 @@
                                 </ul>
                             </nav>
                         </section>
-                        <div class="filter">
+                        <div class="filter mt-4">
+                            <div class=" mb-1">
+                                <span class="filter-title">Фильтр</span>
+                            </div>
+                            <form method="get" enctype="multipart/form-data">
+                                <div class="filter-menu d-flex flex-column">
+                                <select name="label" class="label-select">
+                                    <option>----</option>
+                                    {% for label in labels %}
+                                        <option value="{{ label.id }}">{{ label.value }}</option>
+                                    {% endfor %}
+                                </select>
+                                    <input type="submit" class="btn filter-btn mt-2 p-0" value="Выбрать">
+                                </div>
+                            </form>
                         </div>
                     </div>
                     <div class="catalog-content">

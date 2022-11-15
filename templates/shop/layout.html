@@ -38,11 +38,11 @@
         <div class="d-inline-flex">
             <a class="navbar-logo" href="{{ url_for('main') }}">Bookspace</a>
             <div class="input-control_container">
-                <form class="me-2" method="post">
+                <form class="me-2" method="get">
                     <div class="form-control-sm">
                         <div class="navbar_search col-auto">
                             <span><i class='bx bx-search'></i></span>
-                            <input placeholder="Введите название книги...">
+                            <input placeholder="Введите название книги..." name="search">
                             <button type="submit">Найти</button>
                         </div>
                     </div>
