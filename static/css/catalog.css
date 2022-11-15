@@ -1,5 +1,14 @@
 @import url("https://use.typekit.net/qkq8sxc.css");
 
+.catalog {
+    position: relative;
+
+}
+
+.catalog_body {
+    align-items: flex-start;
+}
+
 h1 {
     font-family: montserrat, sans-serif;
     font-weight: 500;
@@ -10,7 +19,6 @@ h1 {
 
 .catalog-nav {
     width: 200px;
-    height: auto !important;
 }
 
 .catalog-nav_title {
@@ -61,11 +69,6 @@ h1 {
     margin: 0 auto;
 }
 
-.product-card-content{
-    padding-top: 10px;
-    padding-left: 10px;
-}
-
 .product-card-price{
     font-family: montserrat, sans-serif;
     font-weight: 700;
@@ -74,16 +77,22 @@ h1 {
     font-size: 16px;
 }
 
-.product-card-title-link{
+.product-card-title-link {
+    text-decoration: none;
+}
+
+.product-card-title-link p{
+    white-space: nowrap; /* Запрещаем перенос строк */
+    overflow: hidden;
+    text-overflow: ellipsis;
     font-family: montserrat, sans-serif;
     font-weight: 500;
     font-style: normal;
     color: #28231D;
     font-size: 14px;
-    text-decoration: none;
 }
 
-.product-card-title-link:hover{
+.product-card-title-link p:hover{
     color: #FF9F1C;
 }
 

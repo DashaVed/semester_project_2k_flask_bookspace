@@ -1,7 +1,7 @@
 @import url("https://use.typekit.net/qkq8sxc.css");
 
 
-body{
+body {
     font-family: montserrat, sans-serif;
     font-weight: 500;
     font-style: normal;
@@ -11,12 +11,12 @@ body{
     padding-right: 20px;
 }
 
-.top-nav{
+.top-nav {
     padding-bottom: 4px;
     padding-top: 4px;
 }
 
-.top-nav .nav-item{
+.top-nav .nav-item {
     margin-bottom: 0;
     margin-right: 22px;
     display: inline-block;
@@ -24,12 +24,12 @@ body{
     color: #28231D;
 }
 
-.top-nav .nav-item:hover{
+.top-nav .nav-item:hover {
     color: #28231D;
     text-decoration: underline;
 }
 
-.navbar{
+.navbar {
     height: 60px;
     padding-bottom: 4px;
     padding-top: 4px;
@@ -37,11 +37,7 @@ body{
 
 }
 
-.fill-height{
-    height: 60px !important;
-}
-
-.navbar .navbar-logo{
+.navbar .navbar-logo, .footer-contact_logo {
 
     margin-right: 10px;
     color: #FF9F1C;
@@ -51,13 +47,13 @@ body{
     vertical-align: middle;
 }
 
-.navbar .input-control_container{
+.navbar .input-control_container {
     padding-top: 10px;
     height: 60px;
     vertical-align: middle;
 }
 
-.navbar .navbar_search{
+.navbar .navbar_search {
 
     vertical-align: middle;
     border: 2px solid #DCDCDC;
@@ -71,7 +67,7 @@ body{
     color: #28231D;
 }
 
-.navbar .navbar_search input{
+.navbar .navbar_search input {
     vertical-align: middle;
     margin: 0;
     width: 560px;
@@ -80,7 +76,7 @@ body{
     box-shadow: none;
 }
 
-.navbar .input-control_container .navbar_search button{
+.navbar .input-control_container .navbar_search button {
     float: right;
     width: 100px;
     border: 1px solid #DCDCDC;
@@ -93,7 +89,7 @@ body{
     height: 38px;
 }
 
-.navbar .input-control_container .navbar_search span{
+.navbar .input-control_container .navbar_search span {
     margin-left: 4px;
     font-size: 24px;
     vertical-align: middle;
@@ -101,30 +97,28 @@ body{
     align-items: center;
 }
 
-.navbar .input-control_container{
+.navbar .input-control_container {
     margin: 0;
     width: 720px;
 }
 
-.dropdown{
-    padding-top: 18px;
+.dropdown {
+    padding-top: 10px;
 }
 
-.navbar .nav-user{
+.navbar .nav-user {
     display: inline-flex;
-    align-items: center;
-    justify-content: center;
 }
 
-.navbar .nav-user a{
-    padding-top: 18px;
+.navbar .nav-user a {
+    padding-top: 10px;
     padding-left: 32px;
     color: #28231D;
     text-decoration: none;
     font-size: 36px;
 }
 
-.dropdown .dropdown-menu .dropdown-item{
+.dropdown .dropdown-menu .dropdown-item {
     padding: 0;
     margin-left: 24px;
     margin-bottom: 4px;
@@ -132,30 +126,30 @@ body{
     height: 20px;
 }
 
-.dropdown .dropdown-menu .dropdown-item:hover{
+.dropdown .dropdown-menu .dropdown-item:hover {
     text-decoration: underline;
 }
 
-.dropdown .dropdown-menu .dropdown-item h6{
+.dropdown .dropdown-menu .dropdown-item h6 {
     font-family: montserrat, sans-serif;
     font-weight: 500;
     font-size: 14px;
     color: #28231D;
 }
 
-.navbar .nav-user a:hover{
+.navbar .nav-user a:hover {
     background-color: white;
     color: #363636;
 }
 
-.menu-nav{
+.menu-nav {
     padding-top: 12px;
     padding-bottom: 10px;
     display: flex;
     flex-shrink: 0;
 }
 
-.menu-nav  button{
+.menu-nav button {
     display: flex;
     height: 43px;
     width: auto;
@@ -164,7 +158,7 @@ body{
     background-color: white;
 }
 
-.menu-nav .menu-text{
+.menu-nav .menu-text {
     padding-top: 8px;
     font-family: montserrat, sans-serif;
     font-weight: 500;
@@ -172,12 +166,12 @@ body{
     color: #28231D;
 }
 
-.menu-icon{
+.menu-icon {
     margin-right: 10px;
     font-size: 32px;
 }
 
-.navbar-nav a{
+.navbar-nav a {
     margin-left: 100px;
     font-family: montserrat, sans-serif;
     font-weight: 500;
@@ -185,13 +179,64 @@ body{
     color: #28231D;
 }
 
-.line{
+.line {
     border-bottom: 2px solid #DCDCDC;
 }
 
-.banner img{
+.banner img {
     margin-top: 30px;
     background-position: center !important;
     height: 80%;
     width: 100%;
 }
+
+/*START FOOTER*/
+.footer-contact_logo:hover {
+    color: #FF9F1C;
+}
+
+.footer-contact {
+    font-family: montserrat, sans-serif;
+    font-weight: 500;
+    font-size: 18px;
+    color: #28231D;
+}
+
+.footer-menu_nav-item {
+    list-style-type: none;
+}
+
+.footer-menu_nav-item a {
+    font-family: montserrat, sans-serif;
+    font-weight: 500;
+    font-size: 20px;
+    color: #28231D;
+    text-decoration: none;
+}
+
+.footer-menu_nav-item a:hover {
+    text-decoration: underline;
+}
+
+.footer-social-link {
+    align-items: center;
+    text-align: center;
+}
+
+.footer-social-link_title {
+    font-family: montserrat, sans-serif;
+    font-weight: 500;
+    font-size: 20px;
+    color: #28231D;
+}
+
+.footer-social-link_item {
+    list-style-type: none;
+}
+
+.footer-social-link_item i {
+    font-size: 40px;
+    color: #28231D;
+}
+
+/*END FOOTER*/

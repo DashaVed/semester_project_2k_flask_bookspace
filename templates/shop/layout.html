@@ -33,9 +33,9 @@
         </div>
     </div>
 </nav>
-<nav class="navbar navbar-expand-lg">
+<nav class="navbar navbar-expand-lg mb-4">
     <div class="container-fluid">
-        <div class="fill-height d-flex">
+        <div class="d-inline-flex">
             <a class="navbar-logo" href="{{ url_for('main') }}">Bookspace</a>
             <div class="input-control_container">
                 <form class="me-2" method="post">
@@ -78,26 +78,55 @@
         </div>
     </div>
 </nav>
-<nav class="menu-nav navbar-expand-lg">
-    <div class="container-fluid">
-        <div class="d-inline-flex align-items-center">
-            <button>
-                <span class="menu-icon"><i class='bx bx-menu'></i></span><span class="menu-text">Каталог</span>
-            </button>
-            <div class="navbar-nav">
-                <a class="nav-link active" href="{{ url_for('get_sales') }}">Акции</a>
-                <a class="nav-link active" href="{{ url_for('get_new') }}">Новинки</a>
-                <a class="nav-link active" href="{{ url_for('get_bestsellery') }}">Бестселлеры</a>
-                <a class="nav-link active" href="{{ url_for('get_best_price') }}">Лучшие цены</a>
-            </div>
-        </div>
-    </div>
-
-</nav>
 <div class="line"></div>
 <!-- END NAVBAR -->
 
 {% block content %}
 {% endblock %}
+
+<div class="line"></div>
+<footer class="nr-footer">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="footer-content d-inline-flex mt-3 mb-3 justify-content-between">
+                <div class="footer-contact d-flex flex-column">
+                    <a class="footer-contact_logo" href="{{ url_for('main') }}">Bookspace</a>
+                    <span class="footer-contact_email pt-3">store@bookspace.ru</span>
+                    <span class="footer-contact_phone pt-3">+7 996 115 31 80</span>
+                </div>
+                <div class="footer-menu mt-3">
+                    <nav class="footer-menu_nav">
+                        <ul class="footer-menu_nav-list d-flex flex-column p-0">
+                            {% if is_authenticated %}
+                                <li class="footer-menu_nav-item pb-2"><a href="{{ url_for('profile') }}">Мой профиль</a>
+                                </li>
+                                <li class="footer-menu_nav-item pb-2"><a href="{{ url_for('wishlist') }}">Отложенные
+                                    книги</a></li>
+                            {% else %}
+                                <li class="footer-menu_nav-item pb-2"><a href="{{ url_for('login') }}">Мой профиль</a>
+                                </li>
+                                <li class="footer-menu_nav-item pb-2"><a href="{{ url_for('login') }}">Отложенные
+                                    книги</a></li>
+                            {% endif %}
+                            <li class="footer-menu_nav-item pb-2"><a href="{{ url_for('delivery') }}">Доставка и
+                                оплата</a>
+                            </li>
+                            <li class="footer-menu_nav-item pb-2"><a href="{{ url_for('about_us') }}">Контакты</a></li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="footer-social-link d-flex flex-column mt-3 me-3">
+                    <span class="footer-social-link_title pb-2">Наши социальные сети:</span>
+                    <ul class="footer-social-link_list d-inline-flex p-0">
+                        <li class="footer-social-link_item ms-3 pe-3"><i class='bx bxl-instagram'></i></li>
+                        <li class="footer-social-link_item pe-3"><i class='bx bxl-telegram'></i></li>
+                        <li class="footer-social-link_item pe-3"><i class='bx bxl-vk'></i></li>
+                        <li class="footer-social-link_item pe-3"><i class='bx bxl-whatsapp'></i></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
 </body>
 </html>
