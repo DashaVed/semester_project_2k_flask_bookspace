@@ -409,58 +409,66 @@ def logout():
 
 @app.route('/admin')
 def admin():
-    products = db.select('SELECT * FROM product')
-    return render_template('shop/admin/main_admin.html', products=products)
+    if is_admin():
+        products = db.select('SELECT * FROM product')
+        return render_template('shop/admin/main_admin.html', products=products)
+    flash('Войдите как админ')
+    return render_template('shop/auth/authorization.html')
 
 
 @app.route('/admin/product-form', defaults={'product_id': None}, methods=['GET', 'POST'])
 @app.route('/admin/product-form/<int:product_id>', methods=['GET', 'POST'])
 def edit_product(product_id=None):
-    if product_id:
-        header = 'Редактирование товара'
-        product = db.select('SELECT * FROM product WHERE product_id = %s', values=(product_id,))[0]
-        print(product)
-    else:
-        header = 'Добавление товара'
-        product = None
-
-    categories = db.select('SELECT id, value FROM category')
-    labels = db.select('SELECT id, value FROM shop_label')
-    form = AddProduct(request.form)
-    if request.method == 'POST':
-        title = form.title.data
-        author = form.author.data
-        publishing_office = form.publishing_office.data
-        series = form.series.data
-        quantity = form.quantity.data
-        price = form.price.data
-        category_id = request.form.get('category')
-        label_id = request.form.get('label')
+    if is_admin():
         if product_id:
-            db.update('UPDATE product SET title = %s, author = %s, publishing_office = %s,'
-                      'series = %s, quantity = %s, price = %s, category_id = %s, label_id = %s WHERE product_id = %s',
-                      values=(
-                          title, author, publishing_office, series, quantity, price, category_id, label_id,
-                          product_id,))
-            flash('Товар успешно изменен')
+            header = 'Редактирование товара'
+            product = db.select('SELECT * FROM product WHERE product_id = %s', values=(product_id,))[0]
         else:
-            description = form.description.data
-            image = photos.save(request.files.get('image'), name=secrets.token_hex(10) + '.')
-            db.insert(
-                'INSERT INTO product (title, author, description, publishing_office, series, quantity, price, image, '
-                'category_id, label_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
-                values=(
-                    title, author, description, publishing_office, series, quantity, price, image, category_id,
-                    label_id))
-            flash('Товар успешно добавлен')
-    return render_template('shop/admin/product_form.html', form=form, categories=categories, labels=labels,
-                           header=header, product=product)
+            header = 'Добавление товара'
+            product = None
+
+        categories = db.select('SELECT id, value FROM category')
+        labels = db.select('SELECT id, value FROM shop_label')
+        form = AddProduct(request.form)
+        if request.method == 'POST':
+            title = form.title.data
+            author = form.author.data
+            publishing_office = form.publishing_office.data
+            series = form.series.data
+            quantity = form.quantity.data
+            price = form.price.data
+            category_id = request.form.get('category')
+            label_id = request.form.get('label')
+            if product_id:
+                db.update('UPDATE product SET title = %s, author = %s, publishing_office = %s,'
+                          'series = %s, quantity = %s, price = %s, category_id = %s, label_id = %s WHERE product_id = %s',
+                          values=(
+                              title, author, publishing_office, series, quantity, price, category_id, label_id,
+                              product_id,))
+                flash('Товар успешно изменен')
+            else:
+                description = form.description.data
+                image = photos.save(request.files.get('image'), name=secrets.token_hex(10) + '.')
+                db.insert(
+                    'INSERT INTO product (title, author, description, publishing_office, series, quantity, price, image, '
+                    'category_id, label_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
+                    values=(
+                        title, author, description, publishing_office, series, quantity, price, image, category_id,
+                        label_id))
+                flash('Товар успешно добавлен')
+        return render_template('shop/admin/product_form.html', form=form, categories=categories, labels=labels,
+                               header=header, product=product)
+    flash('Войдите как админ')
+    return render_template('shop/auth/authorization.html')
 
 
 @app.route('/admin/delete-product/<int:product_id>', methods=['GET'])
 def delete_product(product_id):
-    db.delete('DELETE FROM product WHERE product_id = %s', values=(product_id,))
-    return redirect(request.referrer)
+    if is_admin():
+        db.delete('DELETE FROM product WHERE product_id = %s', values=(product_id,))
+        return redirect(request.referrer)
+    flash('Войдите как админ')
+    return render_template('shop/auth/authorization.html')
 
 
 @app.route('/delivery')
