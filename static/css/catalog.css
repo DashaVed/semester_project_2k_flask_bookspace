@@ -104,7 +104,7 @@ h1 {
 }
 
 .product-card-title-link p{
-    white-space: nowrap; /* Запрещаем перенос строк */
+    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     font-family: montserrat, sans-serif;
@@ -142,7 +142,6 @@ h1 {
 
 .product-card__add-favorites{
     margin-top: 24px;
-
     width: 80px;
     border: none;
     outline: none;

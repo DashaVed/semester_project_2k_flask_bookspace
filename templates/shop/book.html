@@ -12,47 +12,76 @@
                 <div class="book-title pb-3 pt-3">
                     <h1>{{ book.author }}: {{ book.title }}</h1>
                 </div>
-                <div class="book-page-body d-flex">
-                    <div class="book-content">
-                        <div class="book-image">
-                            <img src="{{ url_for( 'static', filename='img/' + book.image) }}"
-                                 alt="{{ book.title }}">
+                <div class="book-page-body d-flex justify-content-between">
+                    <div class="book-content d-flex flex-column">
+                        <div class="book-up d-inline-flex">
+                            <div class="book-image">
+                                <div class="p-3">
+                                    <img src="{{ url_for( 'static', filename='img/' + book.image) }}"
+                                         alt="{{ book.title }}">
+                                </div>
+                            </div>
+                            <div class="book-characteristics mt-3">
+                                <div class="p-3">
+                                    <h3>Характеристики</h3>
+                                    <ul class="book-characteristics-list p-0 mt-3">
+                                        <li class="book-charactiristics-item d-inline-flex">
+                                            <span class="item-name">Автор:</span>
+                                            <span class="item-value">{{ book.author }}</span>
+                                        </li>
+                                        <li class="book-charactiristics-item d-inline-flex">
+                                            <span class="item-name">Издательство:</span>
+                                            <span class="item-value">{{ book.publishing_office }}</span>
+                                        </li>
+                                        <li class="book-charactiristics-item d-inline-flex">
+                                            <span class="item-name">Серия:</span>
+                                            <span class="item-value">{{ book.series }}</span>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                            </div>
+
                         </div>
-                        <div class="book-description">
+                        <div class="book-description mt-5">
                             <h3>Описание</h3>
                             <p>{{ book.description }}</p>
                         </div>
-                        <div class="book-characteristics">
-                            <h3>Характеристики</h3>
-                            <ul class="book-characteristics-list">
-                                <li class="book-charactiristics-item">
-                                    <span class="item-name">Автор:
-                                        <span class="item-value">{{ book.author }}</span>
-                                    </span>
-                                </li>
-                                <li class="book-charactiristics-item">
-                                    <span class="item-name">Издательство:
-                                        <span class="item-value">{{ book.publishing_office }}</span>
-                                    </span>
-                                </li>
-                                <li class="book-charactiristics-item">
-                                    <span class="item-name">Серия:
-                                        <span class="item-value">{{ book.series }}</span>
-                                    </span>
-                                </li>
-                            </ul>
-                        </div>
                     </div>
-                    <div class="book-sidebar">
-                        <div class="product-card-buttons d-flex">
-                            <button type="button" class="b24-btn product-card__add-to-cart">
-                                В корзину
-                            </button>
-                            <button type="button"
-                                    class="product-card__add-favorites justify-content-end">
-                                <i class='bx bx-heart'></i>
-                            </button>
+                    <div class="book-sidebar d-flex flex-column me-4">
+                        <div class="book-sidebar_content p-3 ps-4">
+                            {% if label %}
+                                <div class="book-label mb-4">
+                                    <span>{{ label }}</span>
+                                </div>
+                            {% endif %}
+                            <div class="book-price mb-4">
+                                <span>{{ book.price| int }} p.</span>
+                            </div>
+                            <form action="{{ url_for('add_to_cart', product_id=book.product_id) }}" method="post">
+                                <input type="hidden" name="quantity"
+                                       value="1" min="1" max="{{ book.quantity }}">
+                                <button type="submit" class="b24-btn book-card__add-to-cart mt-4 mb-2">
+                                    В корзину
+                                </button>
+                            </form>
 
+                            <div class="book-action-add-favorites">
+                                {% if is_authenticated %}
+                                <form action="{{ url_for('add_to_wishlist', product_id=book.product_id) }}"
+                                      method="post">
+                                    <button type="submit" class="book-card__add-favorites justify-content-end">
+                                        <i class='bx bx-heart'></i>
+                                        <span>Отложить в избранное</span>
+                                    </button>
+                                </form>
+                                {% else %}
+                                    <button type="submit" class="book-card__add-favorites justify-content-end">
+                                        <a href="{{ url_for('login') }}"><i class='bx bx-heart'></i>
+                                        <span>Отложить в избранное</span></a>
+                                    </button>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
                 </div>

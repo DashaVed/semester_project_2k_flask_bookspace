@@ -6,10 +6,106 @@ h1 {
     font-size: 32px;
 }
 
-.book-content{
+h3 {
+    font-family: montserrat, sans-serif;
+    font-weight: 700;
+    color: #28231D;
+    font-size: 20px;
+}
+
+p, span {
+    font-family: montserrat, sans-serif;
+    font-weight: 500;
+    color: #28231D;
+    font-size: 16px;
+}
+
+.book-content {
     width: 840px;
 }
 
-.book-image{
+.book-image {
+    width: 440px;
+    height: 500px;
+}
+
+.book-image img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.book-characteristics {
+    width: 400px;
 
 }
+
+.book-charactiristics-item {
+    list-style-type: none;
+    width: 360px;
+}
+
+.item-name {
+    width: 128px !important;
+}
+
+.item-value {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/*START SIDEBAR*/
+.book-sidebar {
+    width: 300px;
+    max-height: 248px;
+    border: 1px solid #DCDCDC;
+    border-radius: 3px;
+}
+
+.book-label {
+    height: 28px;
+    max-width: 120px;
+    border: 1px solid #FF9F1C;
+    border-radius: 3px;
+    text-align: center;
+
+}
+
+.book-label span {
+    font-family: montserrat, sans-serif;
+    font-weight: 700;
+    color: #FF9F1C;
+    font-size: 14px;
+}
+
+.book-price span {
+    font-family: montserrat, sans-serif;
+    font-weight: 700;
+    color: #28231D;
+    font-size: 24px;
+}
+
+.book-card__add-to-cart, .book-card__add-favorites {
+    width: 256px;
+    height: 32px;
+    border-radius: 3px;
+    border: 1px solid #D2D68D;
+    background-color: #D2D68D;
+    font-family: montserrat, sans-serif;
+    font-weight: 700;
+    color: #ffffff;
+    font-size: 14px;
+}
+
+.book-card__add-to-cart span, .book-card__add-favorites span {
+    font-family: montserrat, sans-serif;
+    font-weight: 700;
+    color: #ffffff;
+    font-size: 14px;
+}
+
+.book-card__add-favorites a {
+    text-decoration: none;
+    color: #ffffff;
+}
+/*END SIDEBAR*/

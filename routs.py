@@ -109,7 +109,10 @@ def change_quantity(product_id):
 def get_book(book_id):
     book = db.select('SELECT * FROM product WHERE product_id = %s', (book_id,))
     if book:
-        return render_template('shop/book.html', book=book[0], is_authenticated=is_authenticated())
+        label = None
+        if book[0]['label_id'] != 'NULL':
+            label = db.select('SELECT value FROM shop_label WHERE id = %s', values=(book[0]['label_id'],))[0]['value']
+        return render_template('shop/book.html', book=book[0], label=label, is_authenticated=is_authenticated())
     return render_template('shop/error.html')
 
 
@@ -230,7 +233,7 @@ def add_to_wishlist(product_id):
     if not item_exist:
         db.insert('INSERT INTO wishlist_item(wishlist_id, product_id) VALUES (%s, %s)',
                   values=(user_wishlist['wishlist_id'], product_id,))
-        return redirect(request.referrer)
+    return redirect(request.referrer)
 
 
 @app.route('/delete-wishlist/<int:wishlist_id>/<int:product_id>', methods=['POST'])
@@ -267,6 +270,7 @@ def get_product(products, cart):
 def get_cart():
     products = []
     total_amount = 0
+    db_cart = 1
     is_auth = is_authenticated()
     if is_auth:
         db_cart = db.select('SELECT cart_id FROM cart WHERE user_id = %s', values=(session['id'],))[0]['cart_id']
@@ -280,8 +284,7 @@ def get_cart():
                 db.insert('INSERT INTO cart_item (cart_id, product_id, qty) VALUES (%s, %s, %s)',
                           values=(db_cart, item['product_id'], item['qty']))
             clear_cart()
-        else:
-            db_cart = 1
+
     return render_template('shop/personal/cart.html', products=products, cart_id=db_cart, total_amount=total_amount,
                            is_authenticated=is_auth)
 
